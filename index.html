@@ -12,6 +12,11 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
 
 <style>
+
+/* =========================================================
+   RESET
+========================================================= */
+
 *{
     box-sizing:border-box;
     margin:0;
@@ -30,36 +35,41 @@ body{
 }
 
 /* =========================================================
-   BACKGROUND
+   MOVING BACKGROUND
 ========================================================= */
 
 body::before{
     content:"";
     position:fixed;
     inset:0;
+    z-index:-20;
     pointer-events:none;
-    z-index:-10;
 
     background:
-        radial-gradient(circle at var(--mx,50%) var(--my,40%),
-        rgba(170,110,255,.18),
-        transparent 28%),
+        radial-gradient(
+            circle at var(--mx,50%) var(--my,40%),
+            rgba(170,110,255,.18),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 80% 75%,
+            rgba(255,120,190,.10),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 20% 85%,
+            rgba(255,210,140,.07),
+            transparent 32%
+        );
 
-        radial-gradient(circle at 80% 75%,
-        rgba(255,120,190,.10),
-        transparent 30%),
-
-        radial-gradient(circle at 20% 85%,
-        rgba(255,210,140,.07),
-        transparent 32%);
-
-    transition:background-position .2s ease;
+    transition:
+        background-position .25s ease;
 }
 
 .stars{
     position:fixed;
     inset:0;
-    z-index:-8;
+    z-index:-18;
     pointer-events:none;
     overflow:hidden;
 }
@@ -71,7 +81,10 @@ body::before{
     background:white;
     border-radius:50%;
     opacity:.3;
-    animation:twinkle 3s infinite alternate;
+
+    animation:
+        twinkle 3s infinite alternate,
+        starFloat 12s ease-in-out infinite alternate;
 }
 
 @keyframes twinkle{
@@ -86,26 +99,39 @@ body::before{
     }
 }
 
+@keyframes starFloat{
+    from{
+        margin-top:0;
+    }
+
+    to{
+        margin-top:-25px;
+    }
+}
+
 .ambient-orb{
     position:fixed;
     width:350px;
     height:350px;
     border-radius:50%;
-    background:rgba(160,100,255,.06);
     filter:blur(80px);
     pointer-events:none;
-    z-index:-7;
-    animation:orbFloat 12s ease-in-out infinite alternate;
+    z-index:-17;
+
+    animation:
+        orbFloat 12s ease-in-out infinite alternate;
 }
 
 .orb-one{
     top:10%;
     left:-120px;
+    background:rgba(160,100,255,.06);
 }
 
 .orb-two{
     right:-130px;
     bottom:10%;
+    background:rgba(255,120,190,.05);
     animation-delay:4s;
 }
 
@@ -119,6 +145,10 @@ body::before{
     }
 }
 
+/* =========================================================
+   GRAIN
+========================================================= */
+
 .grain{
     position:fixed;
     inset:0;
@@ -130,19 +160,24 @@ body::before{
 }
 
 /* =========================================================
-   LOADING SCREEN
+   LOADER
 ========================================================= */
 
 .loader{
     position:fixed;
     inset:0;
     z-index:100;
+
     background:#050507;
+
     display:flex;
     align-items:center;
     justify-content:center;
     flex-direction:column;
-    transition:opacity 1.2s ease, visibility 1.2s ease;
+
+    transition:
+        opacity 1.2s ease,
+        visibility 1.2s ease;
 }
 
 .loader.hide{
@@ -162,18 +197,21 @@ body::before{
     font-family:'Playfair Display',serif;
     font-size:clamp(55px,13vw,130px);
     letter-spacing:12px;
-    background:linear-gradient(
-        120deg,
-        #fff,
-        #d9c0ff,
-        #ffc5dc,
-        #fff1c7
-    );
+
+    background:
+        linear-gradient(
+            120deg,
+            #fff,
+            #d9c0ff,
+            #ffc5dc,
+            #fff1c7
+        );
 
     -webkit-background-clip:text;
     color:transparent;
 
-    animation:loaderPulse 2s ease-in-out infinite alternate;
+    animation:
+        loaderPulse 2s ease-in-out infinite alternate;
 }
 
 .loader-line{
@@ -190,7 +228,9 @@ body::before{
     width:40%;
     height:100%;
     background:white;
-    animation:loaderLine 1.4s ease-in-out infinite;
+
+    animation:
+        loaderLine 1.4s ease-in-out infinite;
 }
 
 @keyframes loaderPulse{
@@ -216,22 +256,54 @@ body::before{
 }
 
 /* =========================================================
+   PROGRESS BAR
+========================================================= */
+
+.progress{
+    position:fixed;
+    top:0;
+    left:0;
+
+    width:0%;
+    height:2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #b28aff,
+            #ffb7d8,
+            #ffe4a8
+        );
+
+    z-index:90;
+}
+
+/* =========================================================
    MUSIC
 ========================================================= */
+
+#birthdaySong{
+    display:none;
+}
 
 .music-btn{
     position:fixed;
     top:20px;
     right:20px;
+
     z-index:70;
 
     width:50px;
     height:50px;
 
     border-radius:50%;
-    border:1px solid rgba(255,255,255,.2);
 
-    background:rgba(255,255,255,.07);
+    border:
+        1px solid rgba(255,255,255,.2);
+
+    background:
+        rgba(255,255,255,.07);
+
     color:white;
 
     cursor:pointer;
@@ -255,30 +327,12 @@ body::before{
 }
 
 /* =========================================================
-   PROGRESS
-========================================================= */
-
-.progress{
-    position:fixed;
-    top:0;
-    left:0;
-    width:0%;
-    height:2px;
-    background:linear-gradient(
-        90deg,
-        #b28aff,
-        #ffb7d8,
-        #ffe4a8
-    );
-    z-index:90;
-}
-
-/* =========================================================
    SECTIONS
 ========================================================= */
 
 section{
     min-height:100vh;
+
     display:flex;
     align-items:center;
     justify-content:center;
@@ -295,9 +349,12 @@ section{
 
 .eyebrow{
     color:#bcb4ca;
+
     font-size:10px;
     letter-spacing:5px;
+
     text-transform:uppercase;
+
     margin-bottom:25px;
 }
 
@@ -306,20 +363,46 @@ h1,h2{
 }
 
 /* =========================================================
-   REVEAL ANIMATION
+   CINEMATIC SCROLL REVEALS
 ========================================================= */
 
 .reveal{
     opacity:0;
-    transform:translateY(45px);
+    transform:
+        translateY(70px)
+        scale(.97);
+
+    filter:blur(5px);
+
     transition:
-        opacity 1s ease,
-        transform 1s cubic-bezier(.2,.7,.2,1);
+        opacity 1.1s ease,
+        transform 1.2s cubic-bezier(.2,.7,.2,1),
+        filter 1.1s ease;
 }
 
 .reveal.visible{
     opacity:1;
-    transform:translateY(0);
+    transform:
+        translateY(0)
+        scale(1);
+
+    filter:blur(0);
+}
+
+.scene-number{
+    position:absolute;
+
+    left:25px;
+    top:50%;
+
+    transform:
+        translateY(-50%)
+        rotate(-90deg);
+
+    color:#514b58;
+
+    font-size:9px;
+    letter-spacing:4px;
 }
 
 /* =========================================================
@@ -334,20 +417,25 @@ h1,h2{
 
 .hero::after{
     content:"";
+
     position:absolute;
-    width:600px;
-    height:600px;
+
+    width:650px;
+    height:650px;
+
     border-radius:50%;
 
     background:
         radial-gradient(
             circle,
-            rgba(190,130,255,.08),
+            rgba(190,130,255,.09),
             transparent 65%
         );
 
     z-index:-1;
-    animation:heroGlow 8s ease-in-out infinite alternate;
+
+    animation:
+        heroGlow 8s ease-in-out infinite alternate;
 }
 
 @keyframes heroGlow{
@@ -362,7 +450,9 @@ h1,h2{
 
 .opening{
     opacity:0;
-    animation:fadeUp 1.5s ease forwards;
+
+    animation:
+        fadeUp 1.5s ease forwards;
 }
 
 .opening.delay{
@@ -372,7 +462,8 @@ h1,h2{
 .hero h1{
     margin-top:28px;
 
-    font-size:clamp(65px,16vw,155px);
+    font-size:
+        clamp(65px,16vw,155px);
 
     line-height:.85;
 
@@ -388,26 +479,35 @@ h1,h2{
         );
 
     -webkit-background-clip:text;
+
     color:transparent;
 
     opacity:0;
 
-    animation:titleReveal 2.2s ease forwards;
+    animation:
+        titleReveal 2.2s ease forwards;
+
     animation-delay:2.5s;
 
     filter:
-        drop-shadow(0 0 40px rgba(200,160,255,.08));
+        drop-shadow(
+            0 0 40px
+            rgba(200,160,255,.08)
+        );
 }
 
 .hero .subtitle{
     margin-top:35px;
 
     color:#aaa3b4;
+
     font-size:17px;
 
     opacity:0;
 
-    animation:fadeUp 1.5s ease forwards;
+    animation:
+        fadeUp 1.5s ease forwards;
+
     animation-delay:4.2s;
 }
 
@@ -418,9 +518,11 @@ h1,h2{
 
     border-radius:50px;
 
-    border:1px solid rgba(255,255,255,.25);
+    border:
+        1px solid rgba(255,255,255,.25);
 
-    background:rgba(255,255,255,.07);
+    background:
+        rgba(255,255,255,.07);
 
     color:white;
 
@@ -437,17 +539,23 @@ h1,h2{
 
     opacity:0;
 
-    animation:fadeUp 1.5s ease forwards;
+    animation:
+        fadeUp 1.5s ease forwards;
+
     animation-delay:4.8s;
 }
 
 .btn:hover{
-    transform:translateY(-5px) scale(1.02);
+    transform:
+        translateY(-5px)
+        scale(1.02);
 
-    background:rgba(255,255,255,.15);
+    background:
+        rgba(255,255,255,.15);
 
     box-shadow:
-        0 15px 50px rgba(190,130,255,.15);
+        0 15px 50px
+        rgba(190,130,255,.15);
 }
 
 .scroll{
@@ -459,7 +567,8 @@ h1,h2{
     font-size:10px;
     letter-spacing:4px;
 
-    animation:scrollFloat 2s ease-in-out infinite alternate;
+    animation:
+        scrollFloat 2s ease-in-out infinite alternate;
 }
 
 @keyframes scrollFloat{
@@ -499,7 +608,7 @@ h1,h2{
 }
 
 /* =========================================================
-   CHAPTERS
+   HEADINGS
 ========================================================= */
 
 .chapter-number{
@@ -512,7 +621,8 @@ h1,h2{
 }
 
 .container h2{
-    font-size:clamp(42px,9vw,82px);
+    font-size:
+        clamp(42px,9vw,82px);
 
     margin-bottom:25px;
 
@@ -544,7 +654,8 @@ h1,h2{
 
     border-radius:28px;
 
-    border:1px solid rgba(255,255,255,.1);
+    border:
+        1px solid rgba(255,255,255,.1);
 
     background:
         linear-gradient(
@@ -556,7 +667,8 @@ h1,h2{
     backdrop-filter:blur(18px);
 
     box-shadow:
-        0 30px 100px rgba(0,0,0,.35);
+        0 30px 100px
+        rgba(0,0,0,.35);
 
     transition:
         transform .4s ease,
@@ -565,8 +677,14 @@ h1,h2{
 
 .glass:hover{
     transform:translateY(-5px);
-    border-color:rgba(220,180,255,.25);
+
+    border-color:
+        rgba(220,180,255,.25);
 }
+
+/* =========================================================
+   QUOTE
+========================================================= */
 
 .quote{
     font-family:'Playfair Display',serif;
@@ -577,16 +695,7 @@ h1,h2{
 }
 
 /* =========================================================
-   3D CARDS
-========================================================= */
-
-.tilt{
-    transform-style:preserve-3d;
-    transition:transform .15s ease;
-}
-
-/* =========================================================
-   SCHOOL
+   SCHOOL CARD
 ========================================================= */
 
 .school-card{
@@ -629,7 +738,8 @@ h1,h2{
     top:-90px;
     left:-90px;
 
-    animation:cardOrb 5s ease-in-out infinite alternate;
+    animation:
+        cardOrb 5s ease-in-out infinite alternate;
 }
 
 @keyframes cardOrb{
@@ -644,6 +754,7 @@ h1,h2{
 
 .timeline{
     display:grid;
+
     gap:15px;
 
     margin-top:45px;
@@ -693,6 +804,91 @@ h1,h2{
     color:#aaa4b0;
 
     line-height:1.6;
+}
+
+/* =========================================================
+   CLASSIFIED
+========================================================= */
+
+.classified{
+    position:relative;
+
+    overflow:hidden;
+
+    cursor:pointer;
+}
+
+.classified-header{
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    margin-bottom:25px;
+
+    color:#8e8795;
+
+    font-size:10px;
+
+    letter-spacing:3px;
+}
+
+.status{
+    color:#c8a6ff;
+}
+
+.classified-content{
+    text-align:left;
+}
+
+.file-row{
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:20px;
+
+    padding:15px 0;
+
+    border-bottom:
+        1px solid rgba(255,255,255,.06);
+
+    font-size:13px;
+}
+
+.file-row span:first-child{
+    color:#77717e;
+}
+
+.file-row span:last-child{
+    color:#ddd7e2;
+}
+
+.file-secret{
+    margin-top:25px;
+
+    padding:18px;
+
+    border-radius:15px;
+
+    background:
+        rgba(180,130,255,.06);
+
+    color:#a89fac;
+
+    font-size:12px;
+
+    line-height:1.7;
+
+    display:none;
+}
+
+.classified.open .file-secret{
+    display:block;
+
+    animation:
+        fadeUp .7s ease;
 }
 
 /* =========================================================
@@ -758,89 +954,6 @@ h1,h2{
 }
 
 /* =========================================================
-   CLASSIFIED FILE
-========================================================= */
-
-.classified{
-    position:relative;
-
-    overflow:hidden;
-
-    cursor:pointer;
-}
-
-.classified-header{
-    display:flex;
-
-    align-items:center;
-    justify-content:space-between;
-
-    margin-bottom:25px;
-
-    color:#8e8795;
-
-    font-size:10px;
-
-    letter-spacing:3px;
-}
-
-.status{
-    color:#c8a6ff;
-}
-
-.classified-content{
-    text-align:left;
-}
-
-.file-row{
-    display:flex;
-
-    justify-content:space-between;
-
-    gap:20px;
-
-    padding:15px 0;
-
-    border-bottom:
-        1px solid rgba(255,255,255,.06);
-
-    font-size:13px;
-}
-
-.file-row span:first-child{
-    color:#77717e;
-}
-
-.file-row span:last-child{
-    color:#ddd7e2;
-}
-
-.file-secret{
-    margin-top:25px;
-
-    padding:18px;
-
-    border-radius:15px;
-
-    background:
-        rgba(180,130,255,.06);
-
-    color:#a89fac;
-
-    font-size:12px;
-
-    line-height:1.7;
-
-    display:none;
-}
-
-.classified.open .file-secret{
-    display:block;
-
-    animation:fadeUp .7s ease;
-}
-
-/* =========================================================
    PATIENCE
 ========================================================= */
 
@@ -872,7 +985,8 @@ h1,h2{
             #ffe0a3
         );
 
-    transition:width 2.5s cubic-bezier(.2,.8,.2,1);
+    transition:
+        width 2.5s cubic-bezier(.2,.8,.2,1);
 }
 
 .meter-fill.active{
@@ -914,16 +1028,25 @@ h1,h2{
         );
 
     box-shadow:
-        0 0 50px rgba(220,170,255,.18);
+        0 0 50px
+        rgba(220,170,255,.18);
 
     animation:
         rotateDisc 7s linear infinite;
 
     animation-play-state:paused;
+
+    transition:
+        box-shadow .5s ease,
+        transform .2s ease;
 }
 
 .disc.playing{
     animation-play-state:running;
+
+    box-shadow:
+        0 0 70px
+        rgba(220,170,255,.3);
 }
 
 @keyframes rotateDisc{
@@ -932,18 +1055,12 @@ h1,h2{
     }
 }
 
-.music-note{
-    color:#77717e;
-
-    font-size:13px;
-}
-
 /* =========================================================
-   VISUALIZER
+   MUSIC VISUALIZER
 ========================================================= */
 
 .visualizer{
-    height:50px;
+    height:60px;
 
     display:flex;
 
@@ -953,72 +1070,93 @@ h1,h2{
 
     gap:5px;
 
-    margin-top:25px;
+    margin-top:20px;
 }
 
 .bar{
     width:4px;
-    height:10px;
+    height:8px;
 
     border-radius:5px;
 
-    background:#cdb0ff;
+    background:
+        linear-gradient(
+            to top,
+            #a477ff,
+            #ffc1dc
+        );
 
-    animation:wave 1s ease-in-out infinite alternate;
-
-    animation-play-state:paused;
-}
-
-.bar:nth-child(2){animation-delay:.1s}
-.bar:nth-child(3){animation-delay:.2s}
-.bar:nth-child(4){animation-delay:.3s}
-.bar:nth-child(5){animation-delay:.4s}
-.bar:nth-child(6){animation-delay:.3s}
-.bar:nth-child(7){animation-delay:.2s}
-.bar:nth-child(8){animation-delay:.1s}
-
-.visualizer.playing .bar{
-    animation-play-state:running;
-}
-
-@keyframes wave{
-    from{
-        height:7px;
-    }
-
-    to{
-        height:42px;
-    }
+    transition:
+        height .08s linear;
 }
 
 /* =========================================================
-   PHOTO ARCHIVE
+   PHOTO POLAROIDS
 ========================================================= */
 
-.photo-grid{
-    display:grid;
-
-    grid-template-columns:
-        repeat(3,1fr);
-
-    gap:12px;
-
-    margin-top:35px;
+.photo-intro{
+    max-width:600px;
+    margin:auto;
 }
 
-.photo-slot{
+.polaroid-wall{
+    position:relative;
+
+    width:min(800px,100%);
+
+    height:500px;
+
+    margin:50px auto 0;
+}
+
+.polaroid{
+    position:absolute;
+
+    width:190px;
+
+    padding:10px 10px 35px;
+
+    background:#f4f0e8;
+
+    color:#242027;
+
+    box-shadow:
+        0 25px 60px
+        rgba(0,0,0,.5);
+
+    cursor:pointer;
+
+    transition:
+        transform .5s cubic-bezier(.2,.8,.2,1),
+        box-shadow .5s ease;
+
+    animation:
+        polaroidFloat 5s ease-in-out infinite alternate;
+}
+
+.polaroid:hover{
+    z-index:10;
+
+    transform:
+        scale(1.08)
+        rotate(0deg)
+        translateY(-10px);
+
+    box-shadow:
+        0 35px 80px
+        rgba(0,0,0,.65);
+}
+
+.polaroid-photo{
+    width:100%;
+
     aspect-ratio:1;
-
-    border-radius:20px;
-
-    border:
-        1px dashed rgba(255,255,255,.15);
 
     background:
         linear-gradient(
             135deg,
-            rgba(255,255,255,.055),
-            rgba(255,255,255,.02)
+            #18151d,
+            #30283a
         );
 
     display:flex;
@@ -1029,156 +1167,414 @@ h1,h2{
 
     flex-direction:column;
 
-    color:#716b78;
+    color:#817987;
 
     overflow:hidden;
-
-    position:relative;
-
-    transition:
-        transform .35s ease,
-        border-color .35s ease;
 }
 
-.photo-slot:hover{
-    transform:
-        translateY(-7px)
-        rotate(-1deg);
-
-    border-color:
-        rgba(220,180,255,.3);
+.polaroid-photo img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
 }
 
-.photo-slot span{
-    font-size:28px;
-
-    margin-bottom:10px;
+.polaroid-photo span{
+    font-size:30px;
+    margin-bottom:8px;
 }
 
-.photo-slot small{
-    font-size:10px;
-
+.polaroid-photo small{
+    font-size:8px;
     letter-spacing:2px;
 }
 
-/* =========================================================
-   MEMORY BUTTON
-========================================================= */
+.polaroid-caption{
+    position:absolute;
 
-.memory-button{
-    margin-top:30px;
+    bottom:10px;
+    left:0;
+    right:0;
 
-    border:1px solid rgba(255,255,255,.12);
+    text-align:center;
 
-    background:rgba(255,255,255,.04);
+    font-family:
+        'Playfair Display',
+        serif;
 
-    color:#aaa4b0;
-
-    padding:12px 20px;
-
-    border-radius:30px;
-
-    cursor:pointer;
-
-    transition:.3s;
+    font-size:14px;
 }
 
-.memory-button:hover{
-    background:rgba(255,255,255,.1);
+.polaroid:nth-child(1){
+    left:8%;
+    top:35px;
 
-    color:white;
+    transform:rotate(-9deg);
+
+    animation-delay:0s;
+}
+
+.polaroid:nth-child(2){
+    left:34%;
+    top:5px;
+
+    transform:rotate(5deg);
+
+    animation-delay:1s;
+}
+
+.polaroid:nth-child(3){
+    right:8%;
+    top:55px;
+
+    transform:rotate(10deg);
+
+    animation-delay:2s;
+}
+
+.polaroid:nth-child(4){
+    left:20%;
+    top:230px;
+
+    transform:rotate(6deg);
+
+    animation-delay:1.5s;
+}
+
+.polaroid:nth-child(5){
+    right:20%;
+    top:250px;
+
+    transform:rotate(-6deg);
+
+    animation-delay:2.5s;
+}
+
+@keyframes polaroidFloat{
+    from{
+        margin-top:0;
+    }
+
+    to{
+        margin-top:-12px;
+    }
 }
 
 /* =========================================================
-   EASTER EGG
+   PHOTO MODAL
 ========================================================= */
 
-.easter{
+.photo-modal{
     position:fixed;
 
-    bottom:25px;
-    left:25px;
+    inset:0;
 
-    z-index:60;
+    z-index:95;
+
+    background:
+        rgba(3,2,5,.88);
+
+    backdrop-filter:blur(20px);
+
+    display:none;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:25px;
+}
+
+.photo-modal.show{
+    display:flex;
+
+    animation:
+        modalIn .5s ease;
+}
+
+.modal-content{
+    width:min(500px,100%);
+
+    background:#f4f0e8;
+
+    padding:12px 12px 45px;
+
+    color:#242027;
+
+    box-shadow:
+        0 40px 100px
+        rgba(0,0,0,.7);
+
+    position:relative;
+}
+
+.modal-photo{
+    aspect-ratio:1;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    flex-direction:column;
+
+    background:
+        linear-gradient(
+            135deg,
+            #18151d,
+            #30283a
+        );
+
+    color:#817987;
+}
+
+.modal-photo img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.modal-caption{
+    text-align:center;
+
+    font-family:'Playfair Display',serif;
+
+    margin-top:15px;
+}
+
+.modal-close{
+    position:absolute;
+
+    right:-15px;
+    top:-15px;
 
     width:35px;
     height:35px;
 
     border-radius:50%;
 
-    border:
-        1px solid rgba(255,255,255,.08);
+    border:0;
 
-    background:
-        rgba(255,255,255,.02);
+    background:#fff;
 
-    color:#57525c;
+    color:#222;
 
     cursor:pointer;
 
-    transition:.3s;
+    font-size:16px;
 }
 
-.easter:hover{
-    color:#d8b8ff;
+@keyframes modalIn{
+    from{
+        opacity:0;
+        transform:scale(.92);
+    }
 
-    border-color:
-        rgba(220,180,255,.25);
-
-    transform:rotate(20deg) scale(1.1);
-}
-
-.easter-message{
-    position:fixed;
-
-    left:50%;
-    bottom:75px;
-
-    transform:
-        translateX(-50%)
-        translateY(20px);
-
-    opacity:0;
-
-    pointer-events:none;
-
-    z-index:61;
-
-    width:min(360px,calc(100% - 40px));
-
-    padding:20px;
-
-    border-radius:18px;
-
-    border:
-        1px solid rgba(255,255,255,.12);
-
-    background:
-        rgba(15,13,18,.92);
-
-    backdrop-filter:blur(18px);
-
-    color:#cfc7d5;
-
-    text-align:center;
-
-    font-size:13px;
-
-    line-height:1.7;
-
-    transition:.4s;
-}
-
-.easter-message.show{
-    opacity:1;
-
-    transform:
-        translateX(-50%)
-        translateY(0);
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
 }
 
 /* =========================================================
-   FINAL REVEAL
+   CAKE
+========================================================= */
+
+.cake-scene{
+    position:relative;
+
+    min-height:100vh;
+
+    overflow:hidden;
+}
+
+.cake-area{
+    margin:50px auto 0;
+
+    width:300px;
+    height:300px;
+
+    position:relative;
+
+    display:flex;
+
+    align-items:flex-end;
+
+    justify-content:center;
+}
+
+.cake{
+    position:relative;
+
+    width:220px;
+    height:120px;
+
+    border-radius:
+        20px 20px 15px 15px;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #f3c4da,
+            #c28fd0
+        );
+
+    box-shadow:
+        0 25px 60px
+        rgba(0,0,0,.45);
+
+    animation:
+        cakeFloat 3s ease-in-out infinite alternate;
+}
+
+.cake::before{
+    content:"";
+
+    position:absolute;
+
+    top:-28px;
+    left:0;
+
+    width:220px;
+    height:45px;
+
+    border-radius:50%;
+
+    background:
+        #f8d6e5;
+
+    box-shadow:
+        inset 0 -8px 0
+        rgba(150,90,160,.2);
+}
+
+.cake::after{
+    content:"";
+
+    position:absolute;
+
+    left:15px;
+    right:15px;
+    top:15px;
+
+    height:15px;
+
+    border-radius:50%;
+
+    background:
+        rgba(255,255,255,.35);
+}
+
+@keyframes cakeFloat{
+    from{
+        transform:translateY(0);
+    }
+
+    to{
+        transform:translateY(-10px);
+    }
+}
+
+.candle{
+    position:absolute;
+
+    top:-78px;
+
+    width:9px;
+    height:55px;
+
+    background:
+        linear-gradient(
+            to right,
+            #fff,
+            #e7c4ff
+        );
+
+    border-radius:5px;
+
+    cursor:pointer;
+}
+
+.candle:nth-child(1){
+    left:45px;
+}
+
+.candle:nth-child(2){
+    left:82px;
+}
+
+.candle:nth-child(3){
+    left:119px;
+}
+
+.candle:nth-child(4){
+    left:156px;
+}
+
+.flame{
+    position:absolute;
+
+    width:16px;
+    height:25px;
+
+    left:50%;
+    top:-27px;
+
+    transform:translateX(-50%);
+
+    border-radius:
+        50% 50% 50% 50%;
+
+    background:
+        radial-gradient(
+            circle at 50% 70%,
+            #fff,
+            #ffe09a 35%,
+            #ff9eaf 70%,
+            transparent 72%
+        );
+
+    filter:
+        drop-shadow(
+            0 0 12px
+            rgba(255,210,130,.8)
+        );
+
+    animation:
+        flame 1s ease-in-out infinite alternate;
+}
+
+.cake.blown .flame{
+    display:none;
+}
+
+@keyframes flame{
+    from{
+        transform:
+            translateX(-50%)
+            scale(.9)
+            rotate(-3deg);
+    }
+
+    to{
+        transform:
+            translateX(-50%)
+            scale(1.1)
+            rotate(3deg);
+    }
+}
+
+.cake-instruction{
+    margin-top:25px;
+
+    color:#77717e;
+
+    font-size:12px;
+}
+
+/* =========================================================
+   FINAL
 ========================================================= */
 
 .final{
@@ -1223,12 +1619,12 @@ h1,h2{
 }
 
 .final h2{
-    font-size:clamp(45px,10vw,95px);
+    font-size:
+        clamp(45px,10vw,95px);
 }
 
 .reveal-btn{
     opacity:1;
-
     animation:none;
 }
 
@@ -1322,7 +1718,7 @@ h1,h2{
 .end-credits{
     display:none;
 
-    min-height:60vh;
+    min-height:80vh;
 
     align-items:center;
 
@@ -1331,6 +1727,8 @@ h1,h2{
     text-align:center;
 
     padding:100px 20px;
+
+    overflow:hidden;
 }
 
 .end-credits.show{
@@ -1348,6 +1746,9 @@ h1,h2{
     font-size:13px;
 
     letter-spacing:1px;
+
+    animation:
+        creditsFloat 20s linear infinite;
 }
 
 .credits-title{
@@ -1370,6 +1771,106 @@ h1,h2{
     color:#cdb4dd;
 }
 
+@keyframes creditsFloat{
+    from{
+        transform:translateY(80px);
+    }
+
+    to{
+        transform:translateY(-100px);
+    }
+}
+
+/* =========================================================
+   EASTER EGG
+========================================================= */
+
+.easter{
+    position:fixed;
+
+    bottom:25px;
+    left:25px;
+
+    z-index:60;
+
+    width:35px;
+    height:35px;
+
+    border-radius:50%;
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    background:
+        rgba(255,255,255,.02);
+
+    color:#57525c;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.easter:hover{
+    color:#d8b8ff;
+
+    border-color:
+        rgba(220,180,255,.25);
+
+    transform:
+        rotate(20deg)
+        scale(1.1);
+}
+
+.easter-message{
+    position:fixed;
+
+    left:50%;
+    bottom:75px;
+
+    transform:
+        translateX(-50%)
+        translateY(20px);
+
+    opacity:0;
+
+    pointer-events:none;
+
+    z-index:61;
+
+    width:min(360px,calc(100% - 40px));
+
+    padding:20px;
+
+    border-radius:18px;
+
+    border:
+        1px solid rgba(255,255,255,.12);
+
+    background:
+        rgba(15,13,18,.92);
+
+    backdrop-filter:blur(18px);
+
+    color:#cfc7d5;
+
+    text-align:center;
+
+    font-size:13px;
+
+    line-height:1.7;
+
+    transition:.4s;
+}
+
+.easter-message.show{
+    opacity:1;
+
+    transform:
+        translateX(-50%)
+        translateY(0);
+}
+
 /* =========================================================
    CONFETTI
 ========================================================= */
@@ -1382,6 +1883,42 @@ h1,h2{
     pointer-events:none;
 
     z-index:100;
+}
+
+/* =========================================================
+   CURSOR PARTICLES
+========================================================= */
+
+.cursor-particle{
+    position:fixed;
+
+    width:4px;
+    height:4px;
+
+    border-radius:50%;
+
+    background:#d7baff;
+
+    pointer-events:none;
+
+    z-index:75;
+
+    animation:
+        particleFade .8s ease forwards;
+}
+
+@keyframes particleFade{
+    from{
+        opacity:.7;
+        transform:scale(1);
+    }
+
+    to{
+        opacity:0;
+        transform:
+            translateY(-20px)
+            scale(0);
+    }
 }
 
 /* =========================================================
@@ -1404,10 +1941,14 @@ footer{
    MOBILE
 ========================================================= */
 
-@media(max-width:600px){
+@media(max-width:700px){
 
     section{
         padding:75px 18px;
+    }
+
+    .scene-number{
+        display:none;
     }
 
     .stats{
@@ -1435,8 +1976,37 @@ footer{
         min-width:48px;
     }
 
-    .photo-grid{
-        grid-template-columns:1fr 1fr;
+    .polaroid-wall{
+        height:600px;
+    }
+
+    .polaroid{
+        width:145px;
+    }
+
+    .polaroid:nth-child(1){
+        left:2%;
+        top:20px;
+    }
+
+    .polaroid:nth-child(2){
+        left:30%;
+        top:5px;
+    }
+
+    .polaroid:nth-child(3){
+        right:2%;
+        top:30px;
+    }
+
+    .polaroid:nth-child(4){
+        left:8%;
+        top:260px;
+    }
+
+    .polaroid:nth-child(5){
+        right:8%;
+        top:290px;
     }
 
     .typewriter{
@@ -1447,14 +2017,41 @@ footer{
         top:15px;
         right:15px;
     }
+
+    .cake-area{
+        transform:scale(.85);
+    }
 }
+
+@media(max-width:420px){
+
+    .polaroid{
+        width:125px;
+    }
+
+    .polaroid-wall{
+        height:520px;
+    }
+
+    .polaroid:nth-child(4){
+        top:230px;
+    }
+
+    .polaroid:nth-child(5){
+        top:245px;
+    }
+
+}
+
 </style>
 
 </head>
 
 <body>
 
-<!-- LOADER -->
+<!-- =====================================================
+     LOADER
+===================================================== -->
 
 <div class="loader" id="loader">
 
@@ -1472,7 +2069,9 @@ footer{
 
 </div>
 
-<!-- BACKGROUND -->
+<!-- =====================================================
+     BACKGROUND
+===================================================== -->
 
 <div class="stars" id="stars"></div>
 
@@ -1483,7 +2082,9 @@ footer{
 
 <div class="progress" id="progress"></div>
 
-<!-- MUSIC -->
+<!-- =====================================================
+     MUSIC
+===================================================== -->
 
 <audio id="birthdaySong" preload="auto">
     <source src="GOAT.mp3" type="audio/mpeg">
@@ -1493,7 +2094,6 @@ footer{
 class="music-btn"
 id="musicBtn"
 onclick="toggleMusic()"
-aria-label="Toggle music"
 
 >
 
@@ -1503,21 +2103,43 @@ aria-label="Toggle music"
 
 </button>
 
-<!-- CONFETTI -->
+<!-- =====================================================
+     CONFETTI
+===================================================== -->
 
 <canvas id="confetti"></canvas>
 
-<!-- EASTER EGG -->
+<!-- =====================================================
+     EASTER EGG
+===================================================== -->
 
-<button class="easter" onclick="showEasterEgg()">
-    ✦
+<button
+class="easter"
+onclick="showEasterEgg()"
+
+>
+
+```
+✦
+```
+
 </button>
 
-<div class="easter-message" id="easterMessage">
+<div
+    class="easter-message"
+    id="easterMessage"
+>
     👀 You found the secret button.<br><br>
-    There was absolutely no reason for this to exist.<br>
-    But since you're here...<br><br>
-    <strong>Happy Birthday, Vaachi. 😂💜</strong>
+
+```
+There was absolutely no reason for this to exist.<br>
+But since you're here...<br><br>
+
+<strong>
+    Happy Birthday, Vaachi. 😂💜
+</strong>
+```
+
 </div>
 
 <!-- =====================================================
@@ -1544,7 +2166,10 @@ aria-label="Toggle music"
     A tiny cinematic tribute to an unforgettable friendship. 🎬
 </div>
 
-<button class="btn" onclick="beginStory()">
+<button
+    class="btn"
+    onclick="beginStory()"
+>
     ✨ Begin the story
 </button>
 
@@ -1560,6 +2185,10 @@ aria-label="Toggle music"
 ===================================================== -->
 
 <section>
+
+<div class="scene-number">
+    SCENE 01
+</div>
 
 <div class="container reveal">
 
@@ -1598,6 +2227,10 @@ aria-label="Toggle music"
 ===================================================== -->
 
 <section>
+
+<div class="scene-number">
+    SCENE 02
+</div>
 
 <div class="container reveal">
 
@@ -1670,6 +2303,10 @@ aria-label="Toggle music"
 
 <section>
 
+<div class="scene-number">
+    SCENE 03
+</div>
+
 <div class="container reveal">
 
 ```
@@ -1734,6 +2371,7 @@ aria-label="Toggle music"
     </div>
 
     <div class="file-secret">
+
         🔓 FILE UNLOCKED.<br><br>
 
         Investigation conclusion:
@@ -1743,6 +2381,7 @@ aria-label="Toggle music"
 
         Further investigation is strongly recommended.
         😂
+
     </div>
 
 </div>
@@ -1757,6 +2396,10 @@ aria-label="Toggle music"
 ===================================================== -->
 
 <section>
+
+<div class="scene-number">
+    SCENE 04
+</div>
 
 <div class="container reveal">
 
@@ -1780,40 +2423,28 @@ aria-label="Toggle music"
     <div class="stats">
 
         <div class="stat tilt">
-            <span class="stat-number">
-                ∞
-            </span>
-
+            <span class="stat-number">∞</span>
             <span class="stat-label">
                 LUNCH MISSIONS
             </span>
         </div>
 
         <div class="stat tilt">
-            <span class="stat-number">
-                2/10
-            </span>
-
+            <span class="stat-number">2/10</span>
             <span class="stat-label">
                 STEALTH LEVEL
             </span>
         </div>
 
         <div class="stat tilt">
-            <span class="stat-number">
-                100%
-            </span>
-
+            <span class="stat-number">100%</span>
             <span class="stat-label">
                 GETTING CAUGHT
             </span>
         </div>
 
         <div class="stat tilt">
-            <span class="stat-number">
-                😂
-            </span>
-
+            <span class="stat-number">😂</span>
             <span class="stat-label">
                 WORTH IT
             </span>
@@ -1834,6 +2465,10 @@ aria-label="Toggle music"
 
 <section>
 
+<div class="scene-number">
+    SCENE 05
+</div>
+
 <div class="container reveal">
 
 ```
@@ -1849,7 +2484,7 @@ aria-label="Toggle music"
 
     <div class="stat tilt">
 
-        <span class="stat-number counter" data-target="2">
+        <span class="stat-number counter">
             0
         </span>
 
@@ -1908,6 +2543,10 @@ aria-label="Toggle music"
 
 <section>
 
+<div class="scene-number">
+    SCENE 06
+</div>
+
 <div class="container reveal">
 
 ```
@@ -1951,10 +2590,14 @@ aria-label="Toggle music"
 </section>
 
 <!-- =====================================================
-     MUSIC
+     MUSIC SCENE
 ===================================================== -->
 
 <section class="music-scene">
+
+<div class="scene-number">
+    SCENE 07
+</div>
 
 <div class="container reveal">
 
@@ -1990,10 +2633,14 @@ aria-label="Toggle music"
     <div class="bar"></div>
     <div class="bar"></div>
     <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
 
 </div>
 
-<div class="music-note">
+<div class="music-note" style="color:#77717e;font-size:13px;">
     🎧 GOAT — CINEMATIC MODE
 </div>
 
@@ -2016,6 +2663,10 @@ aria-label="Toggle music"
 
 <section>
 
+<div class="scene-number">
+    SCENE 08
+</div>
+
 <div class="container reveal">
 
 ```
@@ -2027,51 +2678,232 @@ aria-label="Toggle music"
     Memories
 </h2>
 
-<p class="description">
+<p class="description photo-intro">
     The photos are coming...
     but the memories already exist.
 </p>
 
-<div class="photo-grid">
 
-    <div class="photo-slot">
-        <span>📸</span>
-        <small>MEMORY 01</small>
+<!-- =================================================
+     PHOTO SYSTEM
+
+     LATER, PUT YOUR PHOTOS BESIDE index.html
+     AND CHANGE THE image: VALUES IN THE JS SECTION.
+================================================= -->
+
+<div class="polaroid-wall">
+
+    <div
+        class="polaroid tilt"
+        onclick="openPhoto(0)"
+    >
+
+        <div class="polaroid-photo">
+
+            <span>📸</span>
+
+            <small>
+                MEMORY 01
+            </small>
+
+        </div>
+
+        <div class="polaroid-caption">
+            THE BEGINNING
+        </div>
+
     </div>
 
-    <div class="photo-slot">
-        <span>📸</span>
-        <small>MEMORY 02</small>
+
+    <div
+        class="polaroid tilt"
+        onclick="openPhoto(1)"
+    >
+
+        <div class="polaroid-photo">
+
+            <span>📸</span>
+
+            <small>
+                MEMORY 02
+            </small>
+
+        </div>
+
+        <div class="polaroid-caption">
+            SCHOOL CHAOS
+        </div>
+
     </div>
 
-    <div class="photo-slot">
-        <span>📸</span>
-        <small>MEMORY 03</small>
+
+    <div
+        class="polaroid tilt"
+        onclick="openPhoto(2)"
+    >
+
+        <div class="polaroid-photo">
+
+            <span>📸</span>
+
+            <small>
+                MEMORY 03
+            </small>
+
+        </div>
+
+        <div class="polaroid-caption">
+            RANDOM MOMENT
+        </div>
+
     </div>
 
-    <div class="photo-slot">
-        <span>📸</span>
-        <small>MEMORY 04</small>
+
+    <div
+        class="polaroid tilt"
+        onclick="openPhoto(3)"
+    >
+
+        <div class="polaroid-photo">
+
+            <span>📸</span>
+
+            <small>
+                MEMORY 04
+            </small>
+
+        </div>
+
+        <div class="polaroid-caption">
+            THE CHAOS
+        </div>
+
     </div>
 
-    <div class="photo-slot">
-        <span>📸</span>
-        <small>MEMORY 05</small>
+
+    <div
+        class="polaroid tilt"
+        onclick="openPhoto(4)"
+    >
+
+        <div class="polaroid-photo">
+
+            <span>📸</span>
+
+            <small>
+                MEMORY 05
+            </small>
+
+        </div>
+
+        <div class="polaroid-caption">
+            TWO YEARS
+        </div>
+
     </div>
 
-    <div class="photo-slot">
-        <span>📸</span>
-        <small>MEMORY 06</small>
+</div>
+```
+
+</div>
+
+</section>
+
+<!-- =====================================================
+     PHOTO MODAL
+===================================================== -->
+
+<div
+    class="photo-modal"
+    id="photoModal"
+    onclick="closePhoto(event)"
+>
+
+```
+<div class="modal-content">
+
+    <button
+        class="modal-close"
+        onclick="closePhoto()"
+    >
+        ✕
+    </button>
+
+    <div
+        class="modal-photo"
+        id="modalPhoto"
+    >
+        📸
+    </div>
+
+    <div
+        class="modal-caption"
+        id="modalCaption"
+    >
+        MEMORY
+    </div>
+
+</div>
+```
+
+</div>
+
+<!-- =====================================================
+     CAKE FINALE
+===================================================== -->
+
+<section class="cake-scene">
+
+<div class="scene-number">
+    SCENE 09
+</div>
+
+<div class="container reveal">
+
+```
+<div class="chapter-number">
+    BEFORE THE FINAL CHAPTER
+</div>
+
+<h2>
+    One Last Thing... 🎂
+</h2>
+
+<p class="description">
+    Every birthday movie needs a cake.
+</p>
+
+<div class="cake-area">
+
+    <div
+        class="cake"
+        id="cake"
+        onclick="blowCandles()"
+    >
+
+        <div class="candle">
+            <div class="flame"></div>
+        </div>
+
+        <div class="candle">
+            <div class="flame"></div>
+        </div>
+
+        <div class="candle">
+            <div class="flame"></div>
+        </div>
+
+        <div class="candle">
+            <div class="flame"></div>
+        </div>
+
     </div>
 
 </div>
 
-<button
-    class="memory-button"
-    onclick="showComingSoon()"
->
-    📷 Photos coming soon
-</button>
+<div class="cake-instruction" id="cakeInstruction">
+    ✨ Click the cake to make a wish.
+</div>
 ```
 
 </div>
@@ -2157,11 +2989,20 @@ Special thanks to lunch breaks<br>
 Soundtrack: GOAT 🎧<br>
 
 <div class="the-end">
+
     THE END.
+
     <br>
-    <span style="font-size:13px;color:#77717e;">
+
+    <span
+        style="
+            font-size:13px;
+            color:#77717e;
+        "
+    >
         ...probably not. 👀
     </span>
+
 </div>
 ```
 
@@ -2185,7 +3026,8 @@ window.addEventListener("load",()=>{
 
         document
             .getElementById("loader")
-            .classList.add("hide");
+            .classList
+            .add("hide");
 
     },1800);
 
@@ -2199,7 +3041,7 @@ window.addEventListener("load",()=>{
 const stars =
     document.getElementById("stars");
 
-for(let i=0;i<150;i++){
+for(let i=0;i<160;i++){
 
     const star =
         document.createElement("div");
@@ -2216,7 +3058,7 @@ for(let i=0;i<150;i++){
         Math.random()*4+"s";
 
     star.style.animationDuration =
-        (2+Math.random()*4)+"s";
+        (2+Math.random()*5)+"s";
 
     stars.appendChild(star);
 
@@ -2227,25 +3069,74 @@ for(let i=0;i<150;i++){
    MOUSE PARALLAX
 ========================================================= */
 
-document.addEventListener("mousemove",(event)=>{
+document.addEventListener(
+    "mousemove",
+    (event)=>{
 
-    const x =
-        (event.clientX / window.innerWidth)*100;
+        const x =
+            (event.clientX /
+            window.innerWidth)*100;
 
-    const y =
-        (event.clientY / window.innerHeight)*100;
+        const y =
+            (event.clientY /
+            window.innerHeight)*100;
 
-    document.body.style.setProperty(
-        "--mx",
-        x+"%"
-    );
+        document.body.style.setProperty(
+            "--mx",
+            x+"%"
+        );
 
-    document.body.style.setProperty(
-        "--my",
-        y+"%"
-    );
+        document.body.style.setProperty(
+            "--my",
+            y+"%"
+        );
 
-});
+    }
+);
+
+
+/* =========================================================
+   CURSOR PARTICLES
+========================================================= */
+
+let lastParticle=0;
+
+document.addEventListener(
+    "mousemove",
+    (event)=>{
+
+        const now=Date.now();
+
+        if(now-lastParticle<45){
+            return;
+        }
+
+        lastParticle=now;
+
+        const particle =
+            document.createElement("div");
+
+        particle.className =
+            "cursor-particle";
+
+        particle.style.left =
+            event.clientX+"px";
+
+        particle.style.top =
+            event.clientY+"px";
+
+        document.body.appendChild(
+            particle
+        );
+
+        setTimeout(()=>{
+
+            particle.remove();
+
+        },800);
+
+    }
+);
 
 
 /* =========================================================
@@ -2283,7 +3174,12 @@ const disc =
 const visualizer =
     document.getElementById("visualizer");
 
+const bars =
+    document.querySelectorAll(".bar");
+
 let musicPlaying=false;
+
+let visualizerTimer=null;
 
 
 function startMusic(){
@@ -2295,12 +3191,14 @@ function startMusic(){
 
             updateMusicUI();
 
+            startVisualizer();
+
         })
         .catch(()=>{
 
             /*
-                If the browser blocks playback,
-                the user can press the music button.
+                Browser blocked playback.
+                User can press the music button.
             */
 
         });
@@ -2319,11 +3217,13 @@ function toggleMusic(){
 
                 updateMusicUI();
 
+                startVisualizer();
+
             })
             .catch(()=>{
 
                 alert(
-                    "Tap the music button once more to start the song 🎧"
+                    "Tap the music button once more to start GOAT 🎧"
                 );
 
             });
@@ -2333,6 +3233,8 @@ function toggleMusic(){
         audio.pause();
 
         musicPlaying=false;
+
+        stopVisualizer();
 
         updateMusicUI();
 
@@ -2347,75 +3249,167 @@ function updateMusicUI(){
 
         musicButton.textContent="🔊";
 
-        musicButton.classList.add("playing");
+        musicButton.classList.add(
+            "playing"
+        );
 
-        disc.classList.add("playing");
+        disc.classList.add(
+            "playing"
+        );
 
-        visualizer.classList.add("playing");
+        visualizer.classList.add(
+            "playing"
+        );
 
     }else{
 
         musicButton.textContent="🎧";
 
-        musicButton.classList.remove("playing");
+        musicButton.classList.remove(
+            "playing"
+        );
 
-        disc.classList.remove("playing");
+        disc.classList.remove(
+            "playing"
+        );
 
-        visualizer.classList.remove("playing");
+        visualizer.classList.remove(
+            "playing"
+        );
 
     }
 
 }
 
 
-audio.addEventListener("play",()=>{
+/* =========================================================
+   MUSIC-REACTIVE VISUALIZER
+========================================================= */
 
-    musicPlaying=true;
+function startVisualizer(){
 
-    updateMusicUI();
+    stopVisualizer();
 
-});
+    visualizerTimer =
+        setInterval(()=>{
+
+            if(!musicPlaying){
+                return;
+            }
+
+            bars.forEach(bar=>{
+
+                const height =
+                    8 +
+                    Math.random()*42;
+
+                bar.style.height =
+                    height+"px";
+
+            });
+
+            const glow =
+                40 +
+                Math.random()*35;
+
+            disc.style.boxShadow =
+                `0 0 ${glow}px
+                 rgba(220,170,255,.35)`;
+
+        },90);
+
+}
 
 
-audio.addEventListener("pause",()=>{
+function stopVisualizer(){
 
-    musicPlaying=false;
+    if(visualizerTimer){
 
-    updateMusicUI();
+        clearInterval(
+            visualizerTimer
+        );
 
-});
+        visualizerTimer=null;
+
+    }
+
+    bars.forEach(bar=>{
+
+        bar.style.height="8px";
+
+    });
+
+    disc.style.boxShadow="";
+
+}
+
+
+audio.addEventListener(
+    "play",
+    ()=>{
+
+        musicPlaying=true;
+
+        updateMusicUI();
+
+        startVisualizer();
+
+    }
+);
+
+
+audio.addEventListener(
+    "pause",
+    ()=>{
+
+        musicPlaying=false;
+
+        updateMusicUI();
+
+        stopVisualizer();
+
+    }
+);
 
 
 /* =========================================================
    SCROLL PROGRESS
 ========================================================= */
 
-window.addEventListener("scroll",()=>{
+window.addEventListener(
+    "scroll",
+    ()=>{
 
-    const scrollTop =
-        window.scrollY;
+        const scrollTop =
+            window.scrollY;
 
-    const height =
-        document.documentElement.scrollHeight
-        - window.innerHeight;
+        const height =
+            document.documentElement
+            .scrollHeight
+            - window.innerHeight;
 
-    const progress =
-        height > 0
-        ? (scrollTop / height)*100
-        : 0;
+        const progress =
+            height>0
+                ? (scrollTop/height)*100
+                : 0;
 
-    document.getElementById("progress")
-        .style.width=progress+"%";
+        document
+            .getElementById("progress")
+            .style.width =
+                progress+"%";
 
-});
+    }
+);
 
 
 /* =========================================================
-   REVEAL ON SCROLL
+   SCROLL REVEALS
 ========================================================= */
 
 const revealElements =
-    document.querySelectorAll(".reveal");
+    document.querySelectorAll(
+        ".reveal"
+    );
 
 
 const observer =
@@ -2438,7 +3432,7 @@ const observer =
         },
 
         {
-            threshold:.15
+            threshold:.12
         }
 
     );
@@ -2452,7 +3446,7 @@ revealElements.forEach(el=>{
 
 
 /* =========================================================
-   TILT CARDS
+   3D TILT
 ========================================================= */
 
 const tiltCards =
@@ -2461,66 +3455,79 @@ const tiltCards =
 
 tiltCards.forEach(card=>{
 
-    card.addEventListener("mousemove",(event)=>{
+    card.addEventListener(
+        "mousemove",
+        (event)=>{
 
-        const rect =
-            card.getBoundingClientRect();
+            const rect =
+                card.getBoundingClientRect();
 
-        const x =
-            event.clientX - rect.left;
+            const x =
+                event.clientX -
+                rect.left;
 
-        const y =
-            event.clientY - rect.top;
+            const y =
+                event.clientY -
+                rect.top;
 
-        const centerX =
-            rect.width/2;
+            const centerX =
+                rect.width/2;
 
-        const centerY =
-            rect.height/2;
+            const centerY =
+                rect.height/2;
 
-        const rotateX =
-            ((y-centerY)/centerY)*-4;
+            const rotateX =
+                ((y-centerY)/
+                centerY)*-4;
 
-        const rotateY =
-            ((x-centerX)/centerX)*4;
+            const rotateY =
+                ((x-centerX)/
+                centerX)*4;
 
-        card.style.transform =
-            `perspective(800px)
-             rotateX(${rotateX}deg)
-             rotateY(${rotateY}deg)
-             translateY(-3px)`;
+            card.style.transform =
+                `perspective(800px)
+                 rotateX(${rotateX}deg)
+                 rotateY(${rotateY}deg)
+                 translateY(-3px)`;
 
-    });
+        }
+    );
 
 
-    card.addEventListener("mouseleave",()=>{
+    card.addEventListener(
+        "mouseleave",
+        ()=>{
 
-        card.style.transform="";
+            card.style.transform="";
 
-    });
+        }
+    );
 
 });
 
 
 /* =========================================================
-   CLASSIFIED FILE
+   CLASSIFIED
 ========================================================= */
 
 function openClassified(){
 
     document
         .getElementById("classified")
-        .classList.toggle("open");
+        .classList
+        .toggle("open");
 
 }
 
 
 /* =========================================================
-   PATIENCE METER
+   PATIENCE
 ========================================================= */
 
 const meter =
-    document.getElementById("patienceMeter");
+    document.getElementById(
+        "patienceMeter"
+    );
 
 
 const meterObserver =
@@ -2532,7 +3539,9 @@ const meterObserver =
 
                 if(entry.isIntersecting){
 
-                    meter.classList.add("active");
+                    meter.classList.add(
+                        "active"
+                    );
 
                 }
 
@@ -2555,8 +3564,9 @@ meterObserver.observe(meter);
 ========================================================= */
 
 const counter =
-    document.querySelector(".counter");
-
+    document.querySelector(
+        ".counter"
+    );
 
 let counterStarted=false;
 
@@ -2584,11 +3594,16 @@ const counterObserver =
 
                             value++;
 
-                            counter.textContent=value;
+                            counter.textContent =
+                                value;
 
-                            if(value>=target){
+                            if(
+                                value>=target
+                            ){
 
-                                clearInterval(interval);
+                                clearInterval(
+                                    interval
+                                );
 
                             }
 
@@ -2611,34 +3626,219 @@ counterObserver.observe(counter);
 
 
 /* =========================================================
+   PHOTO DATA
+========================================================= */
+
+/*
+    ========================================================
+    WHEN YOU GET THE REAL PHOTOS:
+
+    Put them beside index.html:
+
+    photo1.jpg
+    photo2.jpg
+    photo3.jpg
+    photo4.jpg
+    photo5.jpg
+
+    Then change the image values below.
+
+    Example:
+
+    image:"photo1.jpg"
+
+    ========================================================
+*/
+
+const photos=[
+
+    {
+        image:"",
+        caption:"THE BEGINNING"
+    },
+
+    {
+        image:"",
+        caption:"SCHOOL CHAOS"
+    },
+
+    {
+        image:"",
+        caption:"RANDOM MOMENT"
+    },
+
+    {
+        image:"",
+        caption:"THE CHAOS"
+    },
+
+    {
+        image:"",
+        caption:"TWO YEARS"
+    }
+
+];
+
+
+/* =========================================================
+   OPEN PHOTO
+========================================================= */
+
+function openPhoto(index){
+
+    const photo =
+        photos[index];
+
+    const modal =
+        document.getElementById(
+            "photoModal"
+        );
+
+    const modalPhoto =
+        document.getElementById(
+            "modalPhoto"
+        );
+
+    const modalCaption =
+        document.getElementById(
+            "modalCaption"
+        );
+
+
+    modalPhoto.innerHTML="";
+
+
+    if(photo.image){
+
+        const img =
+            document.createElement(
+                "img"
+            );
+
+        img.src=photo.image;
+
+        img.alt=photo.caption;
+
+        modalPhoto.appendChild(
+            img
+        );
+
+    }else{
+
+        modalPhoto.innerHTML=`
+            <span style="font-size:40px;">
+                📸
+            </span>
+            <small>
+                PHOTO COMING SOON
+            </small>
+        `;
+
+    }
+
+
+    modalCaption.textContent =
+        photo.caption;
+
+    modal.classList.add(
+        "show"
+    );
+
+}
+
+
+function closePhoto(event){
+
+    if(
+        event &&
+        event.target &&
+        event.target.closest(".modal-content")
+    ){
+
+        return;
+
+    }
+
+    document
+        .getElementById(
+            "photoModal"
+        )
+        .classList
+        .remove("show");
+
+}
+
+
+/* =========================================================
+   CAKE
+========================================================= */
+
+let cakeBlown=false;
+
+
+function blowCandles(){
+
+    if(cakeBlown){
+        return;
+    }
+
+    cakeBlown=true;
+
+    const cake =
+        document.getElementById(
+            "cake"
+        );
+
+    const instruction =
+        document.getElementById(
+            "cakeInstruction"
+        );
+
+    cake.classList.add(
+        "blown"
+    );
+
+    instruction.innerHTML =
+        "✨ Wish officially made. Now there's one last thing...";
+
+
+    setTimeout(()=>{
+
+        document
+            .querySelector(".final")
+            .scrollIntoView({
+                behavior:"smooth"
+            });
+
+    },1800);
+
+    launchConfetti();
+
+}
+
+
+/* =========================================================
    EASTER EGG
 ========================================================= */
 
 function showEasterEgg(){
 
     const box =
-        document.getElementById("easterMessage");
+        document.getElementById(
+            "easterMessage"
+        );
 
-    box.classList.toggle("show");
+    box.classList.toggle(
+        "show"
+    );
 
     setTimeout(()=>{
 
-        box.classList.remove("show");
+        box.classList.remove(
+            "show"
+        );
 
     },5000);
-
-}
-
-
-/* =========================================================
-   PHOTO PLACEHOLDER
-========================================================= */
-
-function showComingSoon(){
-
-    alert(
-        "📸 The archive is waiting for the memories. Send the photos when you're ready! 💜"
-    );
 
 }
 
@@ -2687,7 +3887,7 @@ and all the memories still waiting to happen.
 
 
 /* =========================================================
-   COUNTDOWN
+   FINAL COUNTDOWN
 ========================================================= */
 
 let revealStarted=false;
@@ -2695,15 +3895,21 @@ let revealStarted=false;
 
 function startReveal(){
 
-    if(revealStarted) return;
+    if(revealStarted){
+        return;
+    }
 
     revealStarted=true;
 
     const button =
-        document.getElementById("revealButton");
+        document.getElementById(
+            "revealButton"
+        );
 
     const countdown =
-        document.getElementById("countdown");
+        document.getElementById(
+            "countdown"
+        );
 
     button.style.display="none";
 
@@ -2725,10 +3931,11 @@ function startReveal(){
 
                 void countdown.offsetWidth;
 
-                countdown.style.animation=
+                countdown.style.animation =
                     "countPulse 1s ease";
 
-                countdown.textContent=number;
+                countdown.textContent =
+                    number;
 
             }else{
 
@@ -2738,7 +3945,8 @@ function startReveal(){
 
                 setTimeout(()=>{
 
-                    countdown.style.display="none";
+                    countdown.style.display =
+                        "none";
 
                     showMessage();
 
@@ -2760,12 +3968,16 @@ function startReveal(){
 function showMessage(){
 
     const message =
-        document.getElementById("message");
+        document.getElementById(
+            "message"
+        );
 
     message.style.display="block";
 
     const target =
-        document.getElementById("typewriter");
+        document.getElementById(
+            "typewriter"
+        );
 
     target.textContent="";
 
@@ -2774,16 +3986,23 @@ function showMessage(){
 
     function type(){
 
-        if(index < messageText.length){
+        if(
+            index<
+            messageText.length
+        ){
 
             target.textContent +=
-                messageText.charAt(index);
+                messageText.charAt(
+                    index
+                );
 
             index++;
 
             setTimeout(
                 type,
-                messageText.charAt(index-1)==="\n"
+                messageText.charAt(
+                    index-1
+                )==="\n"
                     ? 90
                     : 18
             );
@@ -2793,11 +4012,13 @@ function showMessage(){
             setTimeout(()=>{
 
                 document
-                    .getElementById("endCredits")
+                    .getElementById(
+                        "endCredits"
+                    )
                     .classList
                     .add("show");
 
-            },3000);
+            },2500);
 
         }
 
@@ -2829,7 +4050,9 @@ function showMessage(){
 function launchConfetti(){
 
     const canvas =
-        document.getElementById("confetti");
+        document.getElementById(
+            "confetti"
+        );
 
     const ctx =
         canvas.getContext("2d");
@@ -2861,29 +4084,37 @@ function launchConfetti(){
         pieces.push({
 
             x:
-                Math.random()*canvas.width,
+                Math.random()*
+                canvas.width,
 
             y:
-                -20-Math.random()*canvas.height,
+                -20-
+                Math.random()*
+                canvas.height,
 
             size:
-                4+Math.random()*8,
+                4+
+                Math.random()*8,
 
             speed:
-                2+Math.random()*5,
+                2+
+                Math.random()*5,
 
             rotation:
-                Math.random()*Math.PI,
+                Math.random()*
+                Math.PI,
 
             spin:
-                (Math.random()-.5)*.25,
+                (Math.random()-.5)*
+                .25,
 
             opacity:1,
 
             color:
                 colors[
                     Math.floor(
-                        Math.random()*colors.length
+                        Math.random()*
+                        colors.length
                     )
                 ]
 
@@ -2912,7 +4143,10 @@ function launchConfetti(){
             p.rotation+=p.spin;
 
 
-            if(p.y>canvas.height){
+            if(
+                p.y>
+                canvas.height
+            ){
 
                 p.opacity-=.01;
 
@@ -2922,7 +4156,10 @@ function launchConfetti(){
             ctx.save();
 
             ctx.globalAlpha =
-                Math.max(0,p.opacity);
+                Math.max(
+                    0,
+                    p.opacity
+                );
 
             ctx.translate(
                 p.x,
@@ -2982,21 +4219,26 @@ function launchConfetti(){
 
 
 /* =========================================================
-   RESIZE CONFETTI
+   RESIZE
 ========================================================= */
 
-window.addEventListener("resize",()=>{
+window.addEventListener(
+    "resize",
+    ()=>{
 
-    const canvas =
-        document.getElementById("confetti");
+        const canvas =
+            document.getElementById(
+                "confetti"
+            );
 
-    canvas.width =
-        window.innerWidth;
+        canvas.width =
+            window.innerWidth;
 
-    canvas.height =
-        window.innerHeight;
+        canvas.height =
+            window.innerHeight;
 
-});
+    }
+);
 
 </script>
 
