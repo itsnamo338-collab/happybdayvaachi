@@ -1,8 +1,10 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>VAACHI — The Birthday Cut 🎂</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,25 +29,39 @@ body{
     overflow-x:hidden;
 }
 
-/* ================= BACKGROUND ================= */
+/* =========================================================
+   BACKGROUND
+========================================================= */
 
 body::before{
     content:"";
     position:fixed;
     inset:0;
     pointer-events:none;
-    z-index:-5;
+    z-index:-10;
+
     background:
-        radial-gradient(circle at 20% 20%,rgba(150,100,255,.14),transparent 30%),
-        radial-gradient(circle at 80% 70%,rgba(255,130,190,.11),transparent 30%),
-        radial-gradient(circle at 50% 100%,rgba(255,210,140,.06),transparent 35%);
+        radial-gradient(circle at var(--mx,50%) var(--my,40%),
+        rgba(170,110,255,.18),
+        transparent 28%),
+
+        radial-gradient(circle at 80% 75%,
+        rgba(255,120,190,.10),
+        transparent 30%),
+
+        radial-gradient(circle at 20% 85%,
+        rgba(255,210,140,.07),
+        transparent 32%);
+
+    transition:background-position .2s ease;
 }
 
 .stars{
     position:fixed;
     inset:0;
-    z-index:-4;
+    z-index:-8;
     pointer-events:none;
+    overflow:hidden;
 }
 
 .star{
@@ -59,49 +75,216 @@ body::before{
 }
 
 @keyframes twinkle{
-    from{opacity:.15;transform:scale(.7)}
-    to{opacity:.9;transform:scale(1.5)}
+    from{
+        opacity:.12;
+        transform:scale(.6);
+    }
+
+    to{
+        opacity:.9;
+        transform:scale(1.5);
+    }
+}
+
+.ambient-orb{
+    position:fixed;
+    width:350px;
+    height:350px;
+    border-radius:50%;
+    background:rgba(160,100,255,.06);
+    filter:blur(80px);
+    pointer-events:none;
+    z-index:-7;
+    animation:orbFloat 12s ease-in-out infinite alternate;
+}
+
+.orb-one{
+    top:10%;
+    left:-120px;
+}
+
+.orb-two{
+    right:-130px;
+    bottom:10%;
+    animation-delay:4s;
+}
+
+@keyframes orbFloat{
+    from{
+        transform:translate(0,0) scale(1);
+    }
+
+    to{
+        transform:translate(80px,-50px) scale(1.2);
+    }
 }
 
 .grain{
     position:fixed;
     inset:0;
-    z-index:30;
+    z-index:80;
     pointer-events:none;
     opacity:.035;
+
     background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
 }
 
-/* ================= MUSIC ================= */
+/* =========================================================
+   LOADING SCREEN
+========================================================= */
+
+.loader{
+    position:fixed;
+    inset:0;
+    z-index:100;
+    background:#050507;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    transition:opacity 1.2s ease, visibility 1.2s ease;
+}
+
+.loader.hide{
+    opacity:0;
+    visibility:hidden;
+}
+
+.loader-small{
+    color:#77717e;
+    font-size:10px;
+    letter-spacing:5px;
+    text-transform:uppercase;
+    margin-bottom:22px;
+}
+
+.loader-title{
+    font-family:'Playfair Display',serif;
+    font-size:clamp(55px,13vw,130px);
+    letter-spacing:12px;
+    background:linear-gradient(
+        120deg,
+        #fff,
+        #d9c0ff,
+        #ffc5dc,
+        #fff1c7
+    );
+
+    -webkit-background-clip:text;
+    color:transparent;
+
+    animation:loaderPulse 2s ease-in-out infinite alternate;
+}
+
+.loader-line{
+    margin-top:30px;
+    width:180px;
+    height:1px;
+    background:rgba(255,255,255,.12);
+    overflow:hidden;
+}
+
+.loader-line::after{
+    content:"";
+    display:block;
+    width:40%;
+    height:100%;
+    background:white;
+    animation:loaderLine 1.4s ease-in-out infinite;
+}
+
+@keyframes loaderPulse{
+    from{
+        opacity:.55;
+        transform:scale(.98);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1.02);
+    }
+}
+
+@keyframes loaderLine{
+    from{
+        transform:translateX(-100%);
+    }
+
+    to{
+        transform:translateX(350%);
+    }
+}
+
+/* =========================================================
+   MUSIC
+========================================================= */
 
 .music-btn{
     position:fixed;
     top:20px;
     right:20px;
-    z-index:40;
-    width:48px;
-    height:48px;
+    z-index:70;
+
+    width:50px;
+    height:50px;
+
     border-radius:50%;
     border:1px solid rgba(255,255,255,.2);
-    background:rgba(255,255,255,.08);
+
+    background:rgba(255,255,255,.07);
     color:white;
+
     cursor:pointer;
-    backdrop-filter:blur(12px);
-    font-size:19px;
+
+    backdrop-filter:blur(14px);
+
+    font-size:18px;
+
+    transition:.3s;
 }
 
 .music-btn:hover{
-    background:rgba(255,255,255,.17);
+    transform:scale(1.08);
+    background:rgba(255,255,255,.15);
 }
 
-/* ================= SECTIONS ================= */
+.music-btn.playing{
+    box-shadow:
+        0 0 0 5px rgba(220,180,255,.04),
+        0 0 30px rgba(220,180,255,.18);
+}
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+.progress{
+    position:fixed;
+    top:0;
+    left:0;
+    width:0%;
+    height:2px;
+    background:linear-gradient(
+        90deg,
+        #b28aff,
+        #ffb7d8,
+        #ffe4a8
+    );
+    z-index:90;
+}
+
+/* =========================================================
+   SECTIONS
+========================================================= */
 
 section{
     min-height:100vh;
     display:flex;
     align-items:center;
     justify-content:center;
-    padding:80px 22px;
+
+    padding:90px 22px;
+
     position:relative;
 }
 
@@ -112,7 +295,7 @@ section{
 
 .eyebrow{
     color:#bcb4ca;
-    font-size:11px;
+    font-size:10px;
     letter-spacing:5px;
     text-transform:uppercase;
     margin-bottom:25px;
@@ -122,79 +305,179 @@ h1,h2{
     font-family:'Playfair Display',serif;
 }
 
-/* ================= HERO ================= */
+/* =========================================================
+   REVEAL ANIMATION
+========================================================= */
+
+.reveal{
+    opacity:0;
+    transform:translateY(45px);
+    transition:
+        opacity 1s ease,
+        transform 1s cubic-bezier(.2,.7,.2,1);
+}
+
+.reveal.visible{
+    opacity:1;
+    transform:translateY(0);
+}
+
+/* =========================================================
+   HERO
+========================================================= */
 
 .hero{
     flex-direction:column;
     text-align:center;
+    overflow:hidden;
+}
+
+.hero::after{
+    content:"";
+    position:absolute;
+    width:600px;
+    height:600px;
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(190,130,255,.08),
+            transparent 65%
+        );
+
+    z-index:-1;
+    animation:heroGlow 8s ease-in-out infinite alternate;
+}
+
+@keyframes heroGlow{
+    from{
+        transform:scale(.8);
+    }
+
+    to{
+        transform:scale(1.25);
+    }
 }
 
 .opening{
     opacity:0;
-    animation:fadeUp 2s ease forwards;
+    animation:fadeUp 1.5s ease forwards;
 }
 
 .opening.delay{
-    animation-delay:2s;
+    animation-delay:1.3s;
 }
 
 .hero h1{
     margin-top:28px;
+
     font-size:clamp(65px,16vw,155px);
+
     line-height:.85;
+
     letter-spacing:4px;
-    background:linear-gradient(120deg,#ffffff,#dfc5ff,#ffc6dc,#fff2cf);
+
+    background:
+        linear-gradient(
+            120deg,
+            #ffffff,
+            #dfc5ff,
+            #ffc6dc,
+            #fff2cf
+        );
+
     -webkit-background-clip:text;
     color:transparent;
+
     opacity:0;
-    animation:titleReveal 2.5s ease forwards;
-    animation-delay:4s;
+
+    animation:titleReveal 2.2s ease forwards;
+    animation-delay:2.5s;
+
+    filter:
+        drop-shadow(0 0 40px rgba(200,160,255,.08));
 }
 
 .hero .subtitle{
     margin-top:35px;
+
     color:#aaa3b4;
     font-size:17px;
+
     opacity:0;
-    animation:fadeUp 2s ease forwards;
-    animation-delay:6s;
+
+    animation:fadeUp 1.5s ease forwards;
+    animation-delay:4.2s;
 }
 
 .btn{
     margin-top:42px;
+
     padding:15px 30px;
+
     border-radius:50px;
+
     border:1px solid rgba(255,255,255,.25);
+
     background:rgba(255,255,255,.07);
+
     color:white;
+
     font-size:14px;
+
     cursor:pointer;
+
     backdrop-filter:blur(12px);
-    transition:.3s;
+
+    transition:
+        transform .35s ease,
+        background .35s ease,
+        box-shadow .35s ease;
+
     opacity:0;
-    animation:fadeUp 2s ease forwards;
-    animation-delay:6.7s;
+
+    animation:fadeUp 1.5s ease forwards;
+    animation-delay:4.8s;
 }
 
 .btn:hover{
-    transform:translateY(-4px);
+    transform:translateY(-5px) scale(1.02);
+
     background:rgba(255,255,255,.15);
-    box-shadow:0 15px 50px rgba(190,130,255,.15);
+
+    box-shadow:
+        0 15px 50px rgba(190,130,255,.15);
 }
 
 .scroll{
     position:absolute;
     bottom:25px;
+
     color:#68636e;
+
     font-size:10px;
     letter-spacing:4px;
+
+    animation:scrollFloat 2s ease-in-out infinite alternate;
+}
+
+@keyframes scrollFloat{
+    from{
+        transform:translateY(0);
+    }
+
+    to{
+        transform:translateY(8px);
+    }
 }
 
 @keyframes fadeUp{
     from{
         opacity:0;
-        transform:translateY(20px);
+        transform:translateY(25px);
     }
+
     to{
         opacity:1;
         transform:translateY(0);
@@ -205,8 +488,9 @@ h1,h2{
     from{
         opacity:0;
         transform:scale(.88);
-        letter-spacing:20px;
+        letter-spacing:25px;
     }
+
     to{
         opacity:1;
         transform:scale(1);
@@ -214,40 +498,96 @@ h1,h2{
     }
 }
 
-/* ================= CHAPTERS ================= */
+/* =========================================================
+   CHAPTERS
+========================================================= */
 
 .chapter-number{
     color:#c9a4ff;
-    font-size:11px;
+
+    font-size:10px;
     letter-spacing:5px;
+
     margin-bottom:20px;
 }
 
 .container h2{
     font-size:clamp(42px,9vw,82px);
+
     margin-bottom:25px;
+
+    line-height:1;
 }
 
 .description{
     color:#aaa4b0;
+
     max-width:650px;
+
     margin:auto;
+
     line-height:1.9;
+
     font-size:17px;
 }
 
+/* =========================================================
+   GLASS
+========================================================= */
+
 .glass{
     margin:45px auto 0;
+
     max-width:680px;
+
     padding:34px;
+
     border-radius:28px;
+
     border:1px solid rgba(255,255,255,.1);
-    background:rgba(255,255,255,.045);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.06),
+            rgba(255,255,255,.025)
+        );
+
     backdrop-filter:blur(18px);
-    box-shadow:0 30px 100px rgba(0,0,0,.35);
+
+    box-shadow:
+        0 30px 100px rgba(0,0,0,.35);
+
+    transition:
+        transform .4s ease,
+        border-color .4s ease;
 }
 
-/* ================= SCHOOL ================= */
+.glass:hover{
+    transform:translateY(-5px);
+    border-color:rgba(220,180,255,.25);
+}
+
+.quote{
+    font-family:'Playfair Display',serif;
+
+    font-size:30px;
+
+    line-height:1.5;
+}
+
+/* =========================================================
+   3D CARDS
+========================================================= */
+
+.tilt{
+    transform-style:preserve-3d;
+    transition:transform .15s ease;
+}
+
+/* =========================================================
+   SCHOOL
+========================================================= */
 
 .school-card{
     position:relative;
@@ -256,109 +596,300 @@ h1,h2{
 
 .school-card::before{
     content:"SCHOOL ARCHIVE";
+
     position:absolute;
+
     top:16px;
     right:18px;
+
     font-size:9px;
+
     letter-spacing:2px;
+
     color:#6f6976;
 }
 
-.quote{
-    font-family:'Playfair Display',serif;
-    font-size:30px;
-    line-height:1.5;
+.school-card::after{
+    content:"";
+
+    position:absolute;
+
+    width:180px;
+    height:180px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(200,150,255,.10),
+            transparent 70%
+        );
+
+    top:-90px;
+    left:-90px;
+
+    animation:cardOrb 5s ease-in-out infinite alternate;
 }
 
-/* ================= TIMELINE ================= */
+@keyframes cardOrb{
+    to{
+        transform:translate(500px,200px);
+    }
+}
+
+/* =========================================================
+   TIMELINE
+========================================================= */
 
 .timeline{
     display:grid;
     gap:15px;
+
     margin-top:45px;
+
     text-align:left;
 }
 
 .timeline-item{
     display:flex;
+
     gap:20px;
+
     align-items:flex-start;
+
     padding:23px;
-    border-left:1px solid rgba(210,170,255,.4);
-    background:rgba(255,255,255,.035);
-    border-radius:0 18px 18px 0;
+
+    border-left:
+        1px solid rgba(210,170,255,.4);
+
+    background:
+        rgba(255,255,255,.035);
+
+    border-radius:
+        0 18px 18px 0;
+
+    transition:
+        transform .35s ease,
+        background .35s ease;
+}
+
+.timeline-item:hover{
+    transform:translateX(8px);
+
+    background:
+        rgba(255,255,255,.065);
 }
 
 .year{
     color:#d0adff;
+
     font-weight:700;
+
     min-width:65px;
 }
 
 .timeline-item p{
     color:#aaa4b0;
+
     line-height:1.6;
 }
 
-/* ================= STATS ================= */
+/* =========================================================
+   STATS
+========================================================= */
 
 .stats{
     display:grid;
-    grid-template-columns:1fr 1fr;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
     gap:15px;
+
     margin-top:40px;
 }
 
 .stat{
     padding:25px 15px;
-    border:1px solid rgba(255,255,255,.09);
-    background:rgba(255,255,255,.04);
+
+    border:
+        1px solid rgba(255,255,255,.09);
+
+    background:
+        rgba(255,255,255,.04);
+
     border-radius:20px;
+
+    transition:
+        transform .35s ease,
+        border-color .35s ease,
+        background .35s ease;
+}
+
+.stat:hover{
+    transform:
+        translateY(-8px)
+        scale(1.02);
+
+    border-color:
+        rgba(220,180,255,.25);
+
+    background:
+        rgba(255,255,255,.065);
 }
 
 .stat-number{
     display:block;
+
     font-family:'Playfair Display',serif;
+
     font-size:34px;
+
     color:#ecc7ff;
+
     margin-bottom:8px;
 }
 
 .stat-label{
     font-size:12px;
+
     color:#88818f;
 }
 
-/* ================= PATIENCE ================= */
+/* =========================================================
+   CLASSIFIED FILE
+========================================================= */
+
+.classified{
+    position:relative;
+
+    overflow:hidden;
+
+    cursor:pointer;
+}
+
+.classified-header{
+    display:flex;
+
+    align-items:center;
+    justify-content:space-between;
+
+    margin-bottom:25px;
+
+    color:#8e8795;
+
+    font-size:10px;
+
+    letter-spacing:3px;
+}
+
+.status{
+    color:#c8a6ff;
+}
+
+.classified-content{
+    text-align:left;
+}
+
+.file-row{
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:20px;
+
+    padding:15px 0;
+
+    border-bottom:
+        1px solid rgba(255,255,255,.06);
+
+    font-size:13px;
+}
+
+.file-row span:first-child{
+    color:#77717e;
+}
+
+.file-row span:last-child{
+    color:#ddd7e2;
+}
+
+.file-secret{
+    margin-top:25px;
+
+    padding:18px;
+
+    border-radius:15px;
+
+    background:
+        rgba(180,130,255,.06);
+
+    color:#a89fac;
+
+    font-size:12px;
+
+    line-height:1.7;
+
+    display:none;
+}
+
+.classified.open .file-secret{
+    display:block;
+
+    animation:fadeUp .7s ease;
+}
+
+/* =========================================================
+   PATIENCE
+========================================================= */
 
 .meter{
     margin-top:35px;
+
     height:18px;
+
     border-radius:20px;
-    background:rgba(255,255,255,.07);
+
+    background:
+        rgba(255,255,255,.07);
+
     overflow:hidden;
 }
 
 .meter-fill{
     height:100%;
+
     width:0;
+
     border-radius:20px;
-    background:linear-gradient(90deg,#a477ff,#ffb6d5,#ffe0a3);
-    animation:fillMeter 3s ease forwards;
-    animation-delay:1s;
+
+    background:
+        linear-gradient(
+            90deg,
+            #a477ff,
+            #ffb6d5,
+            #ffe0a3
+        );
+
+    transition:width 2.5s cubic-bezier(.2,.8,.2,1);
 }
 
-@keyframes fillMeter{
-    to{width:100%}
+.meter-fill.active{
+    width:100%;
 }
 
 .meter-text{
     margin-top:14px;
+
     color:#8e8795;
+
     font-size:12px;
 }
 
-/* ================= DILJIT ================= */
+/* =========================================================
+   MUSIC SCENE
+========================================================= */
 
 .music-scene{
     min-height:100vh;
@@ -367,28 +898,328 @@ h1,h2{
 .disc{
     width:120px;
     height:120px;
+
     border-radius:50%;
+
     margin:45px auto 25px;
+
     background:
-        radial-gradient(circle,#151319 0 14%,#d6b5ff 15% 17%,#18151d 18% 40%,#e2b8cf 41% 43%,#121015 44%);
-    box-shadow:0 0 50px rgba(220,170,255,.18);
-    animation:rotateDisc 7s linear infinite;
+        radial-gradient(
+            circle,
+            #151319 0 14%,
+            #d6b5ff 15% 17%,
+            #18151d 18% 40%,
+            #e2b8cf 41% 43%,
+            #121015 44%
+        );
+
+    box-shadow:
+        0 0 50px rgba(220,170,255,.18);
+
+    animation:
+        rotateDisc 7s linear infinite;
+
+    animation-play-state:paused;
+}
+
+.disc.playing{
+    animation-play-state:running;
 }
 
 @keyframes rotateDisc{
-    to{transform:rotate(360deg)}
+    to{
+        transform:rotate(360deg);
+    }
 }
 
 .music-note{
     color:#77717e;
+
     font-size:13px;
 }
 
-/* ================= FINAL REVEAL ================= */
+/* =========================================================
+   VISUALIZER
+========================================================= */
+
+.visualizer{
+    height:50px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:5px;
+
+    margin-top:25px;
+}
+
+.bar{
+    width:4px;
+    height:10px;
+
+    border-radius:5px;
+
+    background:#cdb0ff;
+
+    animation:wave 1s ease-in-out infinite alternate;
+
+    animation-play-state:paused;
+}
+
+.bar:nth-child(2){animation-delay:.1s}
+.bar:nth-child(3){animation-delay:.2s}
+.bar:nth-child(4){animation-delay:.3s}
+.bar:nth-child(5){animation-delay:.4s}
+.bar:nth-child(6){animation-delay:.3s}
+.bar:nth-child(7){animation-delay:.2s}
+.bar:nth-child(8){animation-delay:.1s}
+
+.visualizer.playing .bar{
+    animation-play-state:running;
+}
+
+@keyframes wave{
+    from{
+        height:7px;
+    }
+
+    to{
+        height:42px;
+    }
+}
+
+/* =========================================================
+   PHOTO ARCHIVE
+========================================================= */
+
+.photo-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:12px;
+
+    margin-top:35px;
+}
+
+.photo-slot{
+    aspect-ratio:1;
+
+    border-radius:20px;
+
+    border:
+        1px dashed rgba(255,255,255,.15);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.055),
+            rgba(255,255,255,.02)
+        );
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    flex-direction:column;
+
+    color:#716b78;
+
+    overflow:hidden;
+
+    position:relative;
+
+    transition:
+        transform .35s ease,
+        border-color .35s ease;
+}
+
+.photo-slot:hover{
+    transform:
+        translateY(-7px)
+        rotate(-1deg);
+
+    border-color:
+        rgba(220,180,255,.3);
+}
+
+.photo-slot span{
+    font-size:28px;
+
+    margin-bottom:10px;
+}
+
+.photo-slot small{
+    font-size:10px;
+
+    letter-spacing:2px;
+}
+
+/* =========================================================
+   MEMORY BUTTON
+========================================================= */
+
+.memory-button{
+    margin-top:30px;
+
+    border:1px solid rgba(255,255,255,.12);
+
+    background:rgba(255,255,255,.04);
+
+    color:#aaa4b0;
+
+    padding:12px 20px;
+
+    border-radius:30px;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.memory-button:hover{
+    background:rgba(255,255,255,.1);
+
+    color:white;
+}
+
+/* =========================================================
+   EASTER EGG
+========================================================= */
+
+.easter{
+    position:fixed;
+
+    bottom:25px;
+    left:25px;
+
+    z-index:60;
+
+    width:35px;
+    height:35px;
+
+    border-radius:50%;
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    background:
+        rgba(255,255,255,.02);
+
+    color:#57525c;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.easter:hover{
+    color:#d8b8ff;
+
+    border-color:
+        rgba(220,180,255,.25);
+
+    transform:rotate(20deg) scale(1.1);
+}
+
+.easter-message{
+    position:fixed;
+
+    left:50%;
+    bottom:75px;
+
+    transform:
+        translateX(-50%)
+        translateY(20px);
+
+    opacity:0;
+
+    pointer-events:none;
+
+    z-index:61;
+
+    width:min(360px,calc(100% - 40px));
+
+    padding:20px;
+
+    border-radius:18px;
+
+    border:
+        1px solid rgba(255,255,255,.12);
+
+    background:
+        rgba(15,13,18,.92);
+
+    backdrop-filter:blur(18px);
+
+    color:#cfc7d5;
+
+    text-align:center;
+
+    font-size:13px;
+
+    line-height:1.7;
+
+    transition:.4s;
+}
+
+.easter-message.show{
+    opacity:1;
+
+    transform:
+        translateX(-50%)
+        translateY(0);
+}
+
+/* =========================================================
+   FINAL REVEAL
+========================================================= */
 
 .final{
     min-height:100vh;
+
     flex-direction:column;
+
+    overflow:hidden;
+}
+
+.final::before{
+    content:"";
+
+    position:absolute;
+
+    width:700px;
+    height:700px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(200,150,255,.09),
+            transparent 68%
+        );
+
+    animation:
+        finalGlow 8s ease-in-out infinite alternate;
+
+    z-index:-1;
+}
+
+@keyframes finalGlow{
+    from{
+        transform:scale(.7);
+    }
+
+    to{
+        transform:scale(1.2);
+    }
 }
 
 .final h2{
@@ -397,15 +1228,22 @@ h1,h2{
 
 .reveal-btn{
     opacity:1;
+
     animation:none;
 }
 
 .countdown{
     display:none;
+
     font-family:'Playfair Display',serif;
-    font-size:clamp(90px,20vw,190px);
+
+    font-size:
+        clamp(90px,20vw,190px);
+
     color:#ead7ff;
-    animation:countPulse 1s ease;
+
+    animation:
+        countPulse 1s ease;
 }
 
 @keyframes countPulse{
@@ -413,7 +1251,11 @@ h1,h2{
         opacity:0;
         transform:scale(1.5);
     }
-    50%{opacity:1}
+
+    50%{
+        opacity:1;
+    }
+
     to{
         opacity:0;
         transform:scale(.8);
@@ -422,9 +1264,13 @@ h1,h2{
 
 .message{
     display:none;
+
     max-width:720px;
+
     margin-top:40px;
-    animation:messageAppear 2s ease forwards;
+
+    animation:
+        messageAppear 2s ease forwards;
 }
 
 @keyframes messageAppear{
@@ -432,6 +1278,7 @@ h1,h2{
         opacity:0;
         transform:translateY(30px);
     }
+
     to{
         opacity:1;
         transform:translateY(0);
@@ -440,48 +1287,127 @@ h1,h2{
 
 .typewriter{
     color:#ddd7e2;
+
     font-size:17px;
+
     line-height:2;
+
+    white-space:pre-line;
+
+    text-align:left;
 }
 
 .final-line{
     margin-top:35px;
+
     color:#f1c4db;
+
     font-family:'Playfair Display',serif;
+
     font-size:30px;
 }
 
 .signature{
     margin-top:30px;
+
     color:#817987;
+
     font-size:13px;
 }
 
-/* ================= CONFETTI ================= */
+/* =========================================================
+   END CREDITS
+========================================================= */
 
-#confetti{
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-    z-index:50;
+.end-credits{
+    display:none;
+
+    min-height:60vh;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-align:center;
+
+    padding:100px 20px;
 }
 
-/* ================= FOOTER ================= */
+.end-credits.show{
+    display:flex;
 
-footer{
-    text-align:center;
-    padding:35px;
-    color:#57525c;
-    font-size:11px;
+    animation:
+        fadeUp 2s ease;
+}
+
+.credits-inner{
+    color:#7c7482;
+
+    line-height:2.3;
+
+    font-size:13px;
+
     letter-spacing:1px;
 }
 
-/* ================= MOBILE ================= */
+.credits-title{
+    font-family:'Playfair Display',serif;
+
+    color:#eee8f0;
+
+    font-size:30px;
+
+    margin-bottom:30px;
+}
+
+.the-end{
+    margin-top:45px;
+
+    font-family:'Playfair Display',serif;
+
+    font-size:25px;
+
+    color:#cdb4dd;
+}
+
+/* =========================================================
+   CONFETTI
+========================================================= */
+
+#confetti{
+    position:fixed;
+
+    inset:0;
+
+    pointer-events:none;
+
+    z-index:100;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+    text-align:center;
+
+    padding:35px;
+
+    color:#57525c;
+
+    font-size:11px;
+
+    letter-spacing:1px;
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
 
 @media(max-width:600px){
 
     section{
-        padding:70px 18px;
+        padding:75px 18px;
     }
 
     .stats{
@@ -508,351 +1434,736 @@ footer{
     .year{
         min-width:48px;
     }
+
+    .photo-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .typewriter{
+        font-size:15px;
+    }
+
+    .music-btn{
+        top:15px;
+        right:15px;
+    }
 }
 </style>
+
 </head>
 
 <body>
 
+<!-- LOADER -->
+
+<div class="loader" id="loader">
+
+```
+<div class="loader-small">
+    A SPECIAL PRESENTATION
+</div>
+
+<div class="loader-title">
+    VAACHI
+</div>
+
+<div class="loader-line"></div>
+```
+
+</div>
+
+<!-- BACKGROUND -->
+
 <div class="stars" id="stars"></div>
+
+<div class="ambient-orb orb-one"></div>
+<div class="ambient-orb orb-two"></div>
+
 <div class="grain"></div>
 
-<button class="music-btn" onclick="toggleMusic()" id="musicBtn">🎧</button>
+<div class="progress" id="progress"></div>
+
+<!-- MUSIC -->
+
+<audio id="birthdaySong" preload="auto">
+    <source src="GOAT.mp3" type="audio/mpeg">
+</audio>
+
+<button
+class="music-btn"
+id="musicBtn"
+onclick="toggleMusic()"
+aria-label="Toggle music"
+
+>
+
+```
+🎧
+```
+
+</button>
+
+<!-- CONFETTI -->
 
 <canvas id="confetti"></canvas>
 
-<!-- ================= OPENING ================= -->
+<!-- EASTER EGG -->
+
+<button class="easter" onclick="showEasterEgg()">
+    ✦
+</button>
+
+<div class="easter-message" id="easterMessage">
+    👀 You found the secret button.<br><br>
+    There was absolutely no reason for this to exist.<br>
+    But since you're here...<br><br>
+    <strong>Happy Birthday, Vaachi. 😂💜</strong>
+</div>
+
+<!-- =====================================================
+     HERO
+===================================================== -->
 
 <section class="hero">
 
-    <div class="eyebrow opening">
-        A LITTLE STORY ABOUT TWO YEARS
-    </div>
+```
+<div class="eyebrow opening">
+    A LITTLE STORY ABOUT TWO YEARS
+</div>
 
-    <div class="opening delay">
-        SOME STORIES AREN'T PLANNED.<br>
-        THEY JUST HAPPEN.
-    </div>
+<div class="opening delay">
+    SOME STORIES AREN'T PLANNED.<br>
+    THEY JUST HAPPEN.
+</div>
 
-    <h1>VAACHI</h1>
+<h1>
+    VAACHI
+</h1>
 
-    <div class="subtitle">
-        A tiny cinematic tribute to an unforgettable friendship. 🎬
-    </div>
+<div class="subtitle">
+    A tiny cinematic tribute to an unforgettable friendship. 🎬
+</div>
 
-    <button class="btn" onclick="beginStory()">
-        ✨ Begin the story
-    </button>
+<button class="btn" onclick="beginStory()">
+    ✨ Begin the story
+</button>
 
-    <div class="scroll">
-        SCROLL TO CONTINUE ↓
-    </div>
+<div class="scroll">
+    SCROLL TO CONTINUE ↓
+</div>
+```
 
 </section>
 
-
-<!-- ================= CHAPTER 1 ================= -->
+<!-- =====================================================
+     CHAPTER 1
+===================================================== -->
 
 <section>
 
-<div class="container">
+<div class="container reveal">
 
-    <div class="chapter-number">CHAPTER 01</div>
+```
+<div class="chapter-number">
+    CHAPTER 01
+</div>
 
-    <h2>The School Years</h2>
+<h2>
+    The School Years
+</h2>
 
-    <p class="description">
-        Somewhere between classes, random conversations,
-        school chaos and questionable decisions...
-        a friendship happened.
-    </p>
+<p class="description">
+    Somewhere between classes, random conversations,
+    school chaos and questionable decisions...
+    a friendship happened.
+</p>
 
-    <div class="glass school-card">
+<div class="glass school-card tilt">
 
-        <div class="quote">
-            “Two years.<br>
-            Countless memories.<br>
-            And somehow... we're still here.”
-        </div>
-
+    <div class="quote">
+        “Two years.<br>
+        Countless memories.<br>
+        And somehow... we're still here.”
     </div>
+
+</div>
+```
 
 </div>
 
 </section>
 
-
-<!-- ================= CHAPTER 2 ================= -->
-
-<section>
-
-<div class="container">
-
-    <div class="chapter-number">CHAPTER 02</div>
-
-    <h2>The Timeline</h2>
-
-    <p class="description">
-        Two years isn't just a number.
-        It's a collection of tiny moments that somehow became memories.
-    </p>
-
-    <div class="timeline">
-
-        <div class="timeline-item">
-            <div class="year">YEAR 01</div>
-            <p>
-                The beginning. New conversations,
-                new jokes and the start of something neither
-                of us probably expected.
-            </p>
-        </div>
-
-        <div class="timeline-item">
-            <div class="year">YEAR 02</div>
-            <p>
-                More chaos. More stories.
-                More moments that somehow became unforgettable.
-            </p>
-        </div>
-
-        <div class="timeline-item">
-            <div class="year">TODAY</div>
-            <p>
-                Two years later, we're still collecting
-                memories one ridiculous moment at a time.
-            </p>
-        </div>
-
-    </div>
-
-</div>
-
-</section>
-
-
-<!-- ================= LUNCH ================= -->
+<!-- =====================================================
+     TIMELINE
+===================================================== -->
 
 <section>
 
-<div class="container">
+<div class="container reveal">
 
-    <div class="chapter-number">SCHOOL FILE #001</div>
+```
+<div class="chapter-number">
+    CHAPTER 02
+</div>
 
-    <h2>Between-Class Operations 🍱</h2>
+<h2>
+    The Timeline
+</h2>
 
-    <p class="description">
-        Mission: have lunch.<br>
-        Location: between classes.<br>
-        Strategy: absolutely no strategy.
-    </p>
+<p class="description">
+    Two years isn't just a number.
+    It's a collection of tiny moments that somehow became memories.
+</p>
 
-    <div class="glass">
+<div class="timeline">
 
-        <div class="stats">
+    <div class="timeline-item tilt">
 
-            <div class="stat">
-                <span class="stat-number">∞</span>
-                <span class="stat-label">LUNCH MISSIONS</span>
-            </div>
-
-            <div class="stat">
-                <span class="stat-number">2/10</span>
-                <span class="stat-label">STEALTH LEVEL</span>
-            </div>
-
-            <div class="stat">
-                <span class="stat-number">100%</span>
-                <span class="stat-label">GETTING CAUGHT</span>
-            </div>
-
-            <div class="stat">
-                <span class="stat-number">😂</span>
-                <span class="stat-label">WORTH IT</span>
-            </div>
-
+        <div class="year">
+            YEAR 01
         </div>
+
+        <p>
+            The beginning. New conversations,
+            new jokes and the start of something neither
+            of us probably expected.
+        </p>
 
     </div>
 
-</div>
+    <div class="timeline-item tilt">
 
-</section>
-
-
-<!-- ================= FRIENDSHIP STATS ================= -->
-
-<section>
-
-<div class="container">
-
-    <div class="chapter-number">OFFICIAL RECORD</div>
-
-    <h2>Friendship Stats</h2>
-
-    <div class="stats">
-
-        <div class="stat">
-            <span class="stat-number">2</span>
-            <span class="stat-label">YEARS</span>
+        <div class="year">
+            YEAR 02
         </div>
 
-        <div class="stat">
-            <span class="stat-number">∞</span>
-            <span class="stat-label">RANDOM CONVERSATIONS</span>
-        </div>
-
-        <div class="stat">
-            <span class="stat-number">100%</span>
-            <span class="stat-label">SECRETS KEPT</span>
-        </div>
-
-        <div class="stat">
-            <span class="stat-number">MAX</span>
-            <span class="stat-label">CHAOS LEVEL</span>
-        </div>
+        <p>
+            More chaos. More stories.
+            More moments that somehow became unforgettable.
+        </p>
 
     </div>
 
-</div>
+    <div class="timeline-item tilt">
 
-</section>
-
-
-<!-- ================= PATIENCE ================= -->
-
-<section>
-
-<div class="container">
-
-    <div class="chapter-number">CHAPTER 03</div>
-
-    <h2>Legendary Patience 😂</h2>
-
-    <p class="description">
-        Two years of putting up with my nonsense
-        deserves its own achievement.
-    </p>
-
-    <div class="glass">
-
-        <div style="color:#aaa;margin-bottom:10px;">
-            VAACHI'S PATIENCE
+        <div class="year">
+            TODAY
         </div>
 
-        <div class="meter">
-            <div class="meter-fill"></div>
-        </div>
-
-        <div class="meter-text">
-            100% COMPLETE — SOMEHOW STILL SURVIVING
-        </div>
-
-    </div>
-
-</div>
-
-</section>
-
-
-<!-- ================= DILJIT ================= -->
-
-<section class="music-scene">
-
-<div class="container">
-
-    <div class="chapter-number">BONUS SCENE 🎧</div>
-
-    <h2>Main Character Energy</h2>
-
-    <p class="description">
-        Every main character needs a soundtrack.
-        And every Diljit fan probably has one ready. 👀
-    </p>
-
-    <div class="disc"></div>
-
-    <div class="music-note">
-        🎧 CINEMATIC MODE ACTIVATED
-    </div>
-
-    <button class="btn" style="opacity:1;animation:none;" onclick="toggleMusic()">
-        🎵 Toggle ambient music
-    </button>
-
-</div>
-
-</section>
-
-
-<!-- ================= PHOTO PLACEHOLDER ================= -->
-
-<section>
-
-<div class="container">
-
-    <div class="chapter-number">THE ARCHIVE</div>
-
-    <h2>Memories</h2>
-
-    <p class="description">
-        The photos are coming...
-        but the memories already exist.
-    </p>
-
-    <div class="glass">
-
-        <div class="quote">
-            📸<br><br>
-            REAL MEMORIES<br>
-            LOADING...
-        </div>
-
-        <p style="color:#777;margin-top:20px;font-size:13px;">
-            This space is waiting for your photos.
+        <p>
+            Two years later, we're still collecting
+            memories one ridiculous moment at a time.
         </p>
 
     </div>
 
 </div>
+```
+
+</div>
 
 </section>
 
+<!-- =====================================================
+     CLASSIFIED FILE
+===================================================== -->
 
-<!-- ================= FINAL ================= -->
+<section>
+
+<div class="container reveal">
+
+```
+<div class="chapter-number">
+    RESTRICTED ACCESS
+</div>
+
+<h2>
+    The VAACHI File
+</h2>
+
+<p class="description">
+    Apparently someone opened a classified investigation.
+    The findings are... concerning. 👀
+</p>
+
+<div
+    class="glass classified tilt"
+    id="classified"
+    onclick="openClassified()"
+>
+
+    <div class="classified-header">
+
+        <span>
+            FILE #V-02
+        </span>
+
+        <span class="status">
+            ● ACTIVE
+        </span>
+
+    </div>
+
+    <div class="classified-content">
+
+        <div class="file-row">
+            <span>SUBJECT</span>
+            <span>VAACHI</span>
+        </div>
+
+        <div class="file-row">
+            <span>KNOWN ASSOCIATE</span>
+            <span>NAMO</span>
+        </div>
+
+        <div class="file-row">
+            <span>PRIMARY LOCATION</span>
+            <span>SCHOOL</span>
+        </div>
+
+        <div class="file-row">
+            <span>KNOWN ACTIVITY</span>
+            <span>LUNCH OPERATIONS</span>
+        </div>
+
+        <div class="file-row">
+            <span>CHAOS LEVEL</span>
+            <span>HIGH</span>
+        </div>
+
+    </div>
+
+    <div class="file-secret">
+        🔓 FILE UNLOCKED.<br><br>
+
+        Investigation conclusion:
+        two years of friendship have produced an
+        unreasonable amount of memories,
+        jokes and nonsense.<br><br>
+
+        Further investigation is strongly recommended.
+        😂
+    </div>
+
+</div>
+```
+
+</div>
+
+</section>
+
+<!-- =====================================================
+     LUNCH
+===================================================== -->
+
+<section>
+
+<div class="container reveal">
+
+```
+<div class="chapter-number">
+    SCHOOL FILE #001
+</div>
+
+<h2>
+    Between-Class Operations 🍱
+</h2>
+
+<p class="description">
+    Mission: have lunch.<br>
+    Location: between classes.<br>
+    Strategy: absolutely no strategy.
+</p>
+
+<div class="glass">
+
+    <div class="stats">
+
+        <div class="stat tilt">
+            <span class="stat-number">
+                ∞
+            </span>
+
+            <span class="stat-label">
+                LUNCH MISSIONS
+            </span>
+        </div>
+
+        <div class="stat tilt">
+            <span class="stat-number">
+                2/10
+            </span>
+
+            <span class="stat-label">
+                STEALTH LEVEL
+            </span>
+        </div>
+
+        <div class="stat tilt">
+            <span class="stat-number">
+                100%
+            </span>
+
+            <span class="stat-label">
+                GETTING CAUGHT
+            </span>
+        </div>
+
+        <div class="stat tilt">
+            <span class="stat-number">
+                😂
+            </span>
+
+            <span class="stat-label">
+                WORTH IT
+            </span>
+        </div>
+
+    </div>
+
+</div>
+```
+
+</div>
+
+</section>
+
+<!-- =====================================================
+     FRIENDSHIP STATS
+===================================================== -->
+
+<section>
+
+<div class="container reveal">
+
+```
+<div class="chapter-number">
+    OFFICIAL RECORD
+</div>
+
+<h2>
+    Friendship Stats
+</h2>
+
+<div class="stats">
+
+    <div class="stat tilt">
+
+        <span class="stat-number counter" data-target="2">
+            0
+        </span>
+
+        <span class="stat-label">
+            YEARS
+        </span>
+
+    </div>
+
+    <div class="stat tilt">
+
+        <span class="stat-number">
+            ∞
+        </span>
+
+        <span class="stat-label">
+            RANDOM CONVERSATIONS
+        </span>
+
+    </div>
+
+    <div class="stat tilt">
+
+        <span class="stat-number">
+            100%
+        </span>
+
+        <span class="stat-label">
+            SECRETS KEPT
+        </span>
+
+    </div>
+
+    <div class="stat tilt">
+
+        <span class="stat-number">
+            MAX
+        </span>
+
+        <span class="stat-label">
+            CHAOS LEVEL
+        </span>
+
+    </div>
+
+</div>
+```
+
+</div>
+
+</section>
+
+<!-- =====================================================
+     PATIENCE
+===================================================== -->
+
+<section>
+
+<div class="container reveal">
+
+```
+<div class="chapter-number">
+    CHAPTER 03
+</div>
+
+<h2>
+    Legendary Patience 😂
+</h2>
+
+<p class="description">
+    Two years of putting up with my nonsense
+    deserves its own achievement.
+</p>
+
+<div class="glass">
+
+    <div style="color:#aaa;margin-bottom:10px;">
+        VAACHI'S PATIENCE
+    </div>
+
+    <div class="meter">
+
+        <div
+            class="meter-fill"
+            id="patienceMeter"
+        ></div>
+
+    </div>
+
+    <div class="meter-text">
+        100% COMPLETE — SOMEHOW STILL SURVIVING
+    </div>
+
+</div>
+```
+
+</div>
+
+</section>
+
+<!-- =====================================================
+     MUSIC
+===================================================== -->
+
+<section class="music-scene">
+
+<div class="container reveal">
+
+```
+<div class="chapter-number">
+    BONUS SCENE 🎧
+</div>
+
+<h2>
+    Main Character Energy
+</h2>
+
+<p class="description">
+    Every main character needs a soundtrack.
+    And every Diljit fan probably has one ready. 👀
+</p>
+
+<div
+    class="disc"
+    id="disc"
+></div>
+
+<div
+    class="visualizer"
+    id="visualizer"
+>
+
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+
+</div>
+
+<div class="music-note">
+    🎧 GOAT — CINEMATIC MODE
+</div>
+
+<button
+    class="btn"
+    style="opacity:1;animation:none;"
+    onclick="toggleMusic()"
+>
+    🎵 Toggle GOAT
+</button>
+```
+
+</div>
+
+</section>
+
+<!-- =====================================================
+     PHOTO ARCHIVE
+===================================================== -->
+
+<section>
+
+<div class="container reveal">
+
+```
+<div class="chapter-number">
+    THE ARCHIVE
+</div>
+
+<h2>
+    Memories
+</h2>
+
+<p class="description">
+    The photos are coming...
+    but the memories already exist.
+</p>
+
+<div class="photo-grid">
+
+    <div class="photo-slot">
+        <span>📸</span>
+        <small>MEMORY 01</small>
+    </div>
+
+    <div class="photo-slot">
+        <span>📸</span>
+        <small>MEMORY 02</small>
+    </div>
+
+    <div class="photo-slot">
+        <span>📸</span>
+        <small>MEMORY 03</small>
+    </div>
+
+    <div class="photo-slot">
+        <span>📸</span>
+        <small>MEMORY 04</small>
+    </div>
+
+    <div class="photo-slot">
+        <span>📸</span>
+        <small>MEMORY 05</small>
+    </div>
+
+    <div class="photo-slot">
+        <span>📸</span>
+        <small>MEMORY 06</small>
+    </div>
+
+</div>
+
+<button
+    class="memory-button"
+    onclick="showComingSoon()"
+>
+    📷 Photos coming soon
+</button>
+```
+
+</div>
+
+</section>
+
+<!-- =====================================================
+     FINAL
+===================================================== -->
 
 <section class="final">
 
 <div class="container">
 
-    <div class="eyebrow">
-        THE FINAL CHAPTER
+```
+<div class="eyebrow">
+    THE FINAL CHAPTER
+</div>
+
+<h2>
+    Happy Birthday,<br>
+    Vaachi! 🎂
+</h2>
+
+<button
+    class="btn reveal-btn"
+    id="revealButton"
+    onclick="startReveal()"
+>
+    💌 Open your birthday message
+</button>
+
+<div
+    class="countdown"
+    id="countdown"
+></div>
+
+<div
+    class="message"
+    id="message"
+>
+
+    <div
+        class="typewriter"
+        id="typewriter"
+    ></div>
+
+    <div class="final-line">
+        Happy Birthday, Vaachi. 🎂✨
     </div>
 
-    <h2>
-        Happy Birthday,<br>
-        Vaachi! 🎂
-    </h2>
-
-    <button class="btn reveal-btn" onclick="startReveal()">
-        💌 Open your birthday message
-    </button>
-
-    <div class="countdown" id="countdown"></div>
-
-    <div class="message" id="message">
-
-        <div class="typewriter" id="typewriter"></div>
-
-        <div class="final-line">
-            Happy Birthday, Vaachi. 🎂✨
-        </div>
-
-        <div class="signature">
-            — From your fellow lunch criminal 😂
-        </div>
-
+    <div class="signature">
+        — From your fellow lunch criminal 😂
     </div>
+
+</div>
+```
+
+</div>
+
+</section>
+
+<!-- =====================================================
+     END CREDITS
+===================================================== -->
+
+<section
+    class="end-credits"
+    id="endCredits"
+>
+
+<div class="credits-inner">
+
+```
+<div class="credits-title">
+    VAACHI — THE BIRTHDAY CUT
+</div>
+
+Written by Namo<br>
+Directed by questionable decisions<br>
+Produced by school chaos<br>
+Special thanks to lunch breaks<br>
+Soundtrack: GOAT 🎧<br>
+
+<div class="the-end">
+    THE END.
+    <br>
+    <span style="font-size:13px;color:#77717e;">
+        ...probably not. 👀
+    </span>
+</div>
+```
 
 </div>
 
@@ -862,109 +2173,479 @@ footer{
     MADE WITH MEMORIES, CHAOS & QUESTIONABLE LUNCH-TIME DECISIONS.
 </footer>
 
-
 <script>
 
-/* ================= STARS ================= */
+/* =========================================================
+   LOADER
+========================================================= */
 
-const stars = document.getElementById("stars");
+window.addEventListener("load",()=>{
 
-for(let i=0;i<130;i++){
+    setTimeout(()=>{
 
-    const star=document.createElement("div");
+        document
+            .getElementById("loader")
+            .classList.add("hide");
+
+    },1800);
+
+});
+
+
+/* =========================================================
+   STARS
+========================================================= */
+
+const stars =
+    document.getElementById("stars");
+
+for(let i=0;i<150;i++){
+
+    const star =
+        document.createElement("div");
 
     star.className="star";
 
-    star.style.left=Math.random()*100+"%";
-    star.style.top=Math.random()*100+"%";
-    star.style.animationDelay=(Math.random()*4)+"s";
+    star.style.left =
+        Math.random()*100+"%";
+
+    star.style.top =
+        Math.random()*100+"%";
+
+    star.style.animationDelay =
+        Math.random()*4+"s";
+
+    star.style.animationDuration =
+        (2+Math.random()*4)+"s";
 
     stars.appendChild(star);
+
 }
 
 
-/* ================= BEGIN STORY ================= */
+/* =========================================================
+   MOUSE PARALLAX
+========================================================= */
+
+document.addEventListener("mousemove",(event)=>{
+
+    const x =
+        (event.clientX / window.innerWidth)*100;
+
+    const y =
+        (event.clientY / window.innerHeight)*100;
+
+    document.body.style.setProperty(
+        "--mx",
+        x+"%"
+    );
+
+    document.body.style.setProperty(
+        "--my",
+        y+"%"
+    );
+
+});
+
+
+/* =========================================================
+   BEGIN STORY
+========================================================= */
 
 function beginStory(){
 
+    startMusic();
+
     window.scrollTo({
+
         top:window.innerHeight,
+
         behavior:"smooth"
+
     });
 
 }
 
 
-/* ================= AMBIENT MUSIC ================= */
+/* =========================================================
+   MUSIC
+========================================================= */
 
-let audioContext=null;
+const audio =
+    document.getElementById("birthdaySong");
+
+const musicButton =
+    document.getElementById("musicBtn");
+
+const disc =
+    document.getElementById("disc");
+
+const visualizer =
+    document.getElementById("visualizer");
+
 let musicPlaying=false;
-let oscillators=[];
 
-function toggleMusic(){
 
-    if(!audioContext){
+function startMusic(){
 
-        audioContext=new (window.AudioContext || window.webkitAudioContext)();
-
-        const gain=audioContext.createGain();
-
-        gain.gain.value=0.025;
-
-        gain.connect(audioContext.destination);
-
-        const frequencies=[261.63,329.63,392.00,523.25];
-
-        frequencies.forEach((freq,index)=>{
-
-            const osc=audioContext.createOscillator();
-
-            osc.type="sine";
-            osc.frequency.value=freq;
-
-            const g=audioContext.createGain();
-
-            g.gain.value=0.02;
-
-            osc.connect(g);
-            g.connect(gain);
-
-            osc.start();
-
-            oscillators.push(osc);
-
-        });
-
-        musicPlaying=true;
-
-        document.getElementById("musicBtn").textContent="🔊";
-
-    }else{
-
-        if(musicPlaying){
-
-            audioContext.suspend();
-
-            musicPlaying=false;
-
-            document.getElementById("musicBtn").textContent="🎧";
-
-        }else{
-
-            audioContext.resume();
+    audio.play()
+        .then(()=>{
 
             musicPlaying=true;
 
-            document.getElementById("musicBtn").textContent="🔊";
+            updateMusicUI();
 
-        }
+        })
+        .catch(()=>{
+
+            /*
+                If the browser blocks playback,
+                the user can press the music button.
+            */
+
+        });
+
+}
+
+
+function toggleMusic(){
+
+    if(audio.paused){
+
+        audio.play()
+            .then(()=>{
+
+                musicPlaying=true;
+
+                updateMusicUI();
+
+            })
+            .catch(()=>{
+
+                alert(
+                    "Tap the music button once more to start the song 🎧"
+                );
+
+            });
+
+    }else{
+
+        audio.pause();
+
+        musicPlaying=false;
+
+        updateMusicUI();
 
     }
 
 }
 
 
-/* ================= FINAL MESSAGE ================= */
+function updateMusicUI(){
+
+    if(musicPlaying){
+
+        musicButton.textContent="🔊";
+
+        musicButton.classList.add("playing");
+
+        disc.classList.add("playing");
+
+        visualizer.classList.add("playing");
+
+    }else{
+
+        musicButton.textContent="🎧";
+
+        musicButton.classList.remove("playing");
+
+        disc.classList.remove("playing");
+
+        visualizer.classList.remove("playing");
+
+    }
+
+}
+
+
+audio.addEventListener("play",()=>{
+
+    musicPlaying=true;
+
+    updateMusicUI();
+
+});
+
+
+audio.addEventListener("pause",()=>{
+
+    musicPlaying=false;
+
+    updateMusicUI();
+
+});
+
+
+/* =========================================================
+   SCROLL PROGRESS
+========================================================= */
+
+window.addEventListener("scroll",()=>{
+
+    const scrollTop =
+        window.scrollY;
+
+    const height =
+        document.documentElement.scrollHeight
+        - window.innerHeight;
+
+    const progress =
+        height > 0
+        ? (scrollTop / height)*100
+        : 0;
+
+    document.getElementById("progress")
+        .style.width=progress+"%";
+
+});
+
+
+/* =========================================================
+   REVEAL ON SCROLL
+========================================================= */
+
+const revealElements =
+    document.querySelectorAll(".reveal");
+
+
+const observer =
+    new IntersectionObserver(
+
+        (entries)=>{
+
+            entries.forEach(entry=>{
+
+                if(entry.isIntersecting){
+
+                    entry.target
+                        .classList
+                        .add("visible");
+
+                }
+
+            });
+
+        },
+
+        {
+            threshold:.15
+        }
+
+    );
+
+
+revealElements.forEach(el=>{
+
+    observer.observe(el);
+
+});
+
+
+/* =========================================================
+   TILT CARDS
+========================================================= */
+
+const tiltCards =
+    document.querySelectorAll(".tilt");
+
+
+tiltCards.forEach(card=>{
+
+    card.addEventListener("mousemove",(event)=>{
+
+        const rect =
+            card.getBoundingClientRect();
+
+        const x =
+            event.clientX - rect.left;
+
+        const y =
+            event.clientY - rect.top;
+
+        const centerX =
+            rect.width/2;
+
+        const centerY =
+            rect.height/2;
+
+        const rotateX =
+            ((y-centerY)/centerY)*-4;
+
+        const rotateY =
+            ((x-centerX)/centerX)*4;
+
+        card.style.transform =
+            `perspective(800px)
+             rotateX(${rotateX}deg)
+             rotateY(${rotateY}deg)
+             translateY(-3px)`;
+
+    });
+
+
+    card.addEventListener("mouseleave",()=>{
+
+        card.style.transform="";
+
+    });
+
+});
+
+
+/* =========================================================
+   CLASSIFIED FILE
+========================================================= */
+
+function openClassified(){
+
+    document
+        .getElementById("classified")
+        .classList.toggle("open");
+
+}
+
+
+/* =========================================================
+   PATIENCE METER
+========================================================= */
+
+const meter =
+    document.getElementById("patienceMeter");
+
+
+const meterObserver =
+    new IntersectionObserver(
+
+        entries=>{
+
+            entries.forEach(entry=>{
+
+                if(entry.isIntersecting){
+
+                    meter.classList.add("active");
+
+                }
+
+            });
+
+        },
+
+        {
+            threshold:.5
+        }
+
+    );
+
+
+meterObserver.observe(meter);
+
+
+/* =========================================================
+   COUNTER
+========================================================= */
+
+const counter =
+    document.querySelector(".counter");
+
+
+let counterStarted=false;
+
+
+const counterObserver =
+    new IntersectionObserver(
+
+        entries=>{
+
+            entries.forEach(entry=>{
+
+                if(
+                    entry.isIntersecting &&
+                    !counterStarted
+                ){
+
+                    counterStarted=true;
+
+                    let value=0;
+
+                    const target=2;
+
+                    const interval =
+                        setInterval(()=>{
+
+                            value++;
+
+                            counter.textContent=value;
+
+                            if(value>=target){
+
+                                clearInterval(interval);
+
+                            }
+
+                        },400);
+
+                }
+
+            });
+
+        },
+
+        {
+            threshold:.7
+        }
+
+    );
+
+
+counterObserver.observe(counter);
+
+
+/* =========================================================
+   EASTER EGG
+========================================================= */
+
+function showEasterEgg(){
+
+    const box =
+        document.getElementById("easterMessage");
+
+    box.classList.toggle("show");
+
+    setTimeout(()=>{
+
+        box.classList.remove("show");
+
+    },5000);
+
+}
+
+
+/* =========================================================
+   PHOTO PLACEHOLDER
+========================================================= */
+
+function showComingSoon(){
+
+    alert(
+        "📸 The archive is waiting for the memories. Send the photos when you're ready! 💜"
+    );
+
+}
+
+
+/* =========================================================
+   FINAL MESSAGE
+========================================================= */
 
 const messageText = `
 Two years.
@@ -1002,16 +2683,27 @@ you are.
 Here's to the two years we've already had...
 
 and all the memories still waiting to happen.
-
 `;
 
 
-/* ================= COUNTDOWN ================= */
+/* =========================================================
+   COUNTDOWN
+========================================================= */
+
+let revealStarted=false;
+
 
 function startReveal(){
 
-    const button=document.querySelector(".reveal-btn");
-    const countdown=document.getElementById("countdown");
+    if(revealStarted) return;
+
+    revealStarted=true;
+
+    const button =
+        document.getElementById("revealButton");
+
+    const countdown =
+        document.getElementById("countdown");
 
     button.style.display="none";
 
@@ -1021,76 +2713,108 @@ function startReveal(){
 
     countdown.textContent=number;
 
-    const timer=setInterval(()=>{
 
-        number--;
+    const timer =
+        setInterval(()=>{
 
-        if(number>0){
+            number--;
 
-            countdown.style.animation="none";
+            if(number>0){
 
-            void countdown.offsetWidth;
+                countdown.style.animation="none";
 
-            countdown.style.animation="countPulse 1s ease";
+                void countdown.offsetWidth;
 
-            countdown.textContent=number;
+                countdown.style.animation=
+                    "countPulse 1s ease";
 
-        }else{
+                countdown.textContent=number;
 
-            clearInterval(timer);
+            }else{
 
-            countdown.textContent="✨";
+                clearInterval(timer);
 
-            setTimeout(()=>{
+                countdown.textContent="✨";
 
-                countdown.style.display="none";
+                setTimeout(()=>{
 
-                showMessage();
+                    countdown.style.display="none";
 
-                launchConfetti();
+                    showMessage();
 
-            },900);
+                    launchConfetti();
 
-        }
+                },900);
 
-    },1000);
+            }
+
+        },1000);
 
 }
 
 
-/* ================= TYPEWRITER ================= */
+/* =========================================================
+   TYPEWRITER
+========================================================= */
 
 function showMessage(){
 
-    const message=document.getElementById("message");
+    const message =
+        document.getElementById("message");
 
     message.style.display="block";
 
-    const target=document.getElementById("typewriter");
+    const target =
+        document.getElementById("typewriter");
+
+    target.textContent="";
 
     let index=0;
 
+
     function type(){
 
-        if(index<messageText.length){
+        if(index < messageText.length){
 
-            target.textContent+=messageText.charAt(index);
+            target.textContent +=
+                messageText.charAt(index);
 
             index++;
 
-            setTimeout(type,18);
+            setTimeout(
+                type,
+                messageText.charAt(index-1)==="\n"
+                    ? 90
+                    : 18
+            );
+
+        }else{
+
+            setTimeout(()=>{
+
+                document
+                    .getElementById("endCredits")
+                    .classList
+                    .add("show");
+
+            },3000);
 
         }
 
     }
 
+
     type();
+
 
     setTimeout(()=>{
 
         message.scrollIntoView({
+
             behavior:"smooth",
+
             block:"center"
+
         });
 
     },500);
@@ -1098,104 +2822,181 @@ function showMessage(){
 }
 
 
-/* ================= CONFETTI ================= */
+/* =========================================================
+   CONFETTI
+========================================================= */
 
 function launchConfetti(){
 
-    const canvas=document.getElementById("confetti");
+    const canvas =
+        document.getElementById("confetti");
 
-    const ctx=canvas.getContext("2d");
+    const ctx =
+        canvas.getContext("2d");
 
-    canvas.width=window.innerWidth;
-    canvas.height=window.innerHeight;
+
+    canvas.width =
+        window.innerWidth;
+
+    canvas.height =
+        window.innerHeight;
+
 
     const pieces=[];
 
-    for(let i=0;i<220;i++){
+
+    const colors=[
+
+        "#f4c1dc",
+        "#d8b8ff",
+        "#fff0ad",
+        "#b8e9ff",
+        "#ffffff"
+
+    ];
+
+
+    for(let i=0;i<240;i++){
 
         pieces.push({
 
-            x:Math.random()*canvas.width,
+            x:
+                Math.random()*canvas.width,
 
-            y:-20-Math.random()*canvas.height,
+            y:
+                -20-Math.random()*canvas.height,
 
-            size:4+Math.random()*8,
+            size:
+                4+Math.random()*8,
 
-            speed:2+Math.random()*5,
+            speed:
+                2+Math.random()*5,
 
-            rotation:Math.random()*Math.PI,
+            rotation:
+                Math.random()*Math.PI,
 
-            spin:(Math.random()-.5)*.25,
+            spin:
+                (Math.random()-.5)*.25,
 
-            opacity:1
+            opacity:1,
+
+            color:
+                colors[
+                    Math.floor(
+                        Math.random()*colors.length
+                    )
+                ]
 
         });
 
     }
 
+
     let frame=0;
+
 
     function animate(){
 
-        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.clearRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
 
         pieces.forEach(p=>{
 
             p.y+=p.speed;
+
             p.rotation+=p.spin;
 
+
             if(p.y>canvas.height){
+
                 p.opacity-=.01;
+
             }
+
 
             ctx.save();
 
-            ctx.globalAlpha=Math.max(0,p.opacity);
+            ctx.globalAlpha =
+                Math.max(0,p.opacity);
 
-            ctx.translate(p.x,p.y);
+            ctx.translate(
+                p.x,
+                p.y
+            );
 
-            ctx.rotate(p.rotation);
+            ctx.rotate(
+                p.rotation
+            );
 
-            const colors=[
-                "#f4c1dc",
-                "#d8b8ff",
-                "#fff0ad",
-                "#b8e9ff",
-                "#ffffff"
-            ];
-
-            ctx.fillStyle=colors[
-                Math.floor(Math.random()*colors.length)
-            ];
+            ctx.fillStyle =
+                p.color;
 
             ctx.fillRect(
+
                 -p.size/2,
+
                 -p.size/2,
+
                 p.size,
+
                 p.size*1.8
+
             );
 
             ctx.restore();
 
         });
 
+
         frame++;
+
 
         if(frame<600){
 
-            requestAnimationFrame(animate);
+            requestAnimationFrame(
+                animate
+            );
 
         }else{
 
-            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.clearRect(
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
 
         }
 
     }
 
+
     animate();
 
 }
+
+
+/* =========================================================
+   RESIZE CONFETTI
+========================================================= */
+
+window.addEventListener("resize",()=>{
+
+    const canvas =
+        document.getElementById("confetti");
+
+    canvas.width =
+        window.innerWidth;
+
+    canvas.height =
+        window.innerHeight;
+
+});
 
 </script>
 
