@@ -1,21 +1,32 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>VAACHI — The Birthday Cut 🎂</title>
+<title>VAACHI — A Little Story</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
 
 <style>
+:root{
+    --bg:#07070b;
+    --bg2:#0e0b15;
+    --text:#f7f3ff;
+    --muted:#aaa2b7;
+    --pink:#ff5da2;
+    --purple:#9d6cff;
+    --gold:#ffd27d;
+    --glass:rgba(255,255,255,.055);
+    --border:rgba(255,255,255,.11);
+}
+
 *{
-    box-sizing:border-box;
     margin:0;
     padding:0;
+    box-sizing:border-box;
 }
 
 html{
@@ -23,510 +34,336 @@ html{
 }
 
 body{
-    background:#050507;
-    color:#f8f5fb;
-    font-family:'DM Sans',sans-serif;
+    background:
+        radial-gradient(circle at 20% 10%,rgba(157,108,255,.13),transparent 28%),
+        radial-gradient(circle at 80% 30%,rgba(255,93,162,.10),transparent 25%),
+        var(--bg);
+    color:var(--text);
+    font-family:"DM Sans",sans-serif;
     overflow-x:hidden;
 }
 
-/* =========================================================
+/* -------------------------
    BACKGROUND
-========================================================= */
+------------------------- */
 
-body::before{
-    content:"";
+#stars{
     position:fixed;
     inset:0;
-    z-index:-10;
     pointer-events:none;
-    background:
-        radial-gradient(circle at 15% 15%,rgba(150,100,255,.16),transparent 28%),
-        radial-gradient(circle at 85% 35%,rgba(255,120,190,.12),transparent 28%),
-        radial-gradient(circle at 50% 100%,rgba(255,210,140,.07),transparent 35%);
+    z-index:-3;
 }
 
-body::after{
-    content:"";
+.noise{
     position:fixed;
     inset:0;
-    z-index:-9;
     pointer-events:none;
-    background:linear-gradient(
-        120deg,
-        transparent,
-        rgba(255,255,255,.018),
-        transparent
-    );
-    animation:bgMove 12s linear infinite;
+    z-index:9998;
+    opacity:.045;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
 }
 
-@keyframes bgMove{
-    0%{transform:translateX(-30%)}
-    50%{transform:translateX(30%)}
-    100%{transform:translateX(-30%)}
-}
-
-.stars{
+.ambient{
     position:fixed;
-    inset:0;
-    z-index:-8;
-    pointer-events:none;
-}
-
-.star{
-    position:absolute;
-    width:2px;
-    height:2px;
+    width:500px;
+    height:500px;
     border-radius:50%;
-    background:#fff;
-    opacity:.3;
-    animation:twinkle 3s infinite alternate;
-}
-
-@keyframes twinkle{
-    from{
-        opacity:.1;
-        transform:scale(.6);
-    }
-    to{
-        opacity:.9;
-        transform:scale(1.5);
-    }
-}
-
-.grain{
-    position:fixed;
-    inset:0;
-    z-index:40;
+    filter:blur(120px);
     pointer-events:none;
-    opacity:.025;
-    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+    z-index:-2;
+    opacity:.16;
+    animation:floatGlow 10s ease-in-out infinite alternate;
 }
 
-/* =========================================================
-   TOP UI
-========================================================= */
+.ambient.one{
+    background:var(--purple);
+    top:-180px;
+    left:-180px;
+}
 
-.music-btn,
-.secret-btn{
+.ambient.two{
+    background:var(--pink);
+    right:-180px;
+    top:35%;
+    animation-delay:-4s;
+}
+
+@keyframes floatGlow{
+    from{transform:translate(0,0) scale(1)}
+    to{transform:translate(80px,40px) scale(1.2)}
+}
+
+/* -------------------------
+   SCROLL PROGRESS
+------------------------- */
+
+.progress{
     position:fixed;
-    top:20px;
-    z-index:100;
-    width:48px;
-    height:48px;
+    top:0;
+    left:0;
+    height:4px;
+    width:0%;
+    background:linear-gradient(90deg,var(--purple),var(--pink),var(--gold));
+    z-index:10000;
+    box-shadow:0 0 18px rgba(255,93,162,.7);
+}
+
+/* -------------------------
+   MUSIC
+------------------------- */
+
+.music{
+    position:fixed;
+    right:22px;
+    top:22px;
+    z-index:9000;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.music button{
+    width:52px;
+    height:52px;
     border-radius:50%;
     border:1px solid rgba(255,255,255,.18);
-    background:rgba(255,255,255,.07);
-    color:#fff;
+    background:rgba(15,12,22,.72);
+    backdrop-filter:blur(14px);
+    color:white;
     cursor:pointer;
-    backdrop-filter:blur(15px);
+    font-size:20px;
     transition:.3s;
 }
 
-.music-btn{
-    right:20px;
-    font-size:18px;
-}
-
-.secret-btn{
-    left:20px;
-    font-size:17px;
-}
-
-.music-btn:hover,
-.secret-btn:hover{
-    transform:translateY(-3px) scale(1.05);
-    background:rgba(255,255,255,.15);
+.music button:hover{
+    transform:scale(1.08);
+    border-color:var(--pink);
+    box-shadow:0 0 25px rgba(255,93,162,.25);
 }
 
 .music-label{
-    position:fixed;
-    top:76px;
-    right:18px;
-    z-index:100;
-    font-size:9px;
-    letter-spacing:2px;
-    color:#77717e;
     opacity:0;
+    transform:translateX(10px);
     transition:.3s;
+    background:rgba(15,12,22,.8);
+    padding:9px 13px;
+    border-radius:20px;
+    font-size:12px;
+    color:#ddd;
+    pointer-events:none;
 }
 
-.music-label.show{
+.music:hover .music-label{
     opacity:1;
+    transform:translateX(0);
 }
 
-/* =========================================================
-   SECTIONS
-========================================================= */
+/* -------------------------
+   GENERAL
+------------------------- */
 
 section{
+    position:relative;
+    padding:120px 7%;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+}
+
+.kicker{
+    color:var(--pink);
+    text-transform:uppercase;
+    letter-spacing:4px;
+    font-size:11px;
+    font-weight:700;
+    margin-bottom:16px;
+}
+
+h1,h2,h3{
+    font-family:"Playfair Display",serif;
+}
+
+h2{
+    font-size:clamp(38px,6vw,76px);
+    line-height:1;
+}
+
+.subtitle{
+    color:var(--muted);
+    line-height:1.8;
+    max-width:650px;
+    margin-top:22px;
+}
+
+/* -------------------------
+   HERO
+------------------------- */
+
+.hero{
     min-height:100vh;
     display:flex;
     align-items:center;
     justify-content:center;
-    padding:100px 22px;
-    position:relative;
-}
-
-.container{
-    width:min(1050px,100%);
     text-align:center;
-}
-
-.eyebrow{
-    color:#bcb4ca;
-    font-size:11px;
-    letter-spacing:5px;
-    text-transform:uppercase;
-    margin-bottom:25px;
-}
-
-h1,
-h2{
-    font-family:'Playfair Display',serif;
-}
-
-.chapter-number{
-    color:#c9a4ff;
-    font-size:11px;
-    letter-spacing:5px;
-    margin-bottom:20px;
-}
-
-.container h2{
-    font-size:clamp(42px,9vw,82px);
-    margin-bottom:25px;
-}
-
-.description{
-    color:#aaa4b0;
-    max-width:680px;
-    margin:auto;
-    line-height:1.9;
-    font-size:17px;
-}
-
-/* =========================================================
-   BUTTONS
-========================================================= */
-
-.btn{
-    margin-top:42px;
-    padding:15px 30px;
-    border-radius:50px;
-    border:1px solid rgba(255,255,255,.23);
-    background:rgba(255,255,255,.07);
-    color:white;
-    font-size:14px;
-    cursor:pointer;
-    backdrop-filter:blur(12px);
-    transition:.35s;
-}
-
-.btn:hover{
-    transform:translateY(-4px);
-    background:rgba(255,255,255,.15);
-    box-shadow:0 20px 60px rgba(190,130,255,.18);
-}
-
-/* =========================================================
-   HERO
-========================================================= */
-
-.hero{
-    flex-direction:column;
-    text-align:center;
-}
-
-.opening{
-    opacity:0;
-    animation:fadeUp 1.5s ease forwards;
-}
-
-.opening.delay{
-    animation-delay:1.5s;
-}
-
-.hero h1{
-    margin-top:28px;
-    font-size:clamp(65px,16vw,155px);
-    line-height:.85;
-    letter-spacing:4px;
-    background:linear-gradient(
-        120deg,
-        #fff,
-        #dfc5ff,
-        #ffc6dc,
-        #fff2cf
-    );
-    -webkit-background-clip:text;
-    color:transparent;
-    opacity:0;
-    animation:titleReveal 2.2s ease forwards;
-    animation-delay:3s;
-}
-
-.hero .subtitle{
-    margin-top:35px;
-    color:#aaa3b4;
-    font-size:17px;
-    opacity:0;
-    animation:fadeUp 1.5s ease forwards;
-    animation-delay:4.8s;
-}
-
-.hero .btn{
-    opacity:0;
-    animation:fadeUp 1.5s ease forwards;
-    animation-delay:5.4s;
-}
-
-.scroll{
-    position:absolute;
-    bottom:25px;
-    color:#68636e;
-    font-size:10px;
-    letter-spacing:4px;
-    animation:scrollPulse 2s infinite;
-}
-
-@keyframes scrollPulse{
-    50%{
-        opacity:.35;
-        transform:translateY(5px);
-    }
-}
-
-@keyframes fadeUp{
-    from{
-        opacity:0;
-        transform:translateY(25px);
-    }
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-
-@keyframes titleReveal{
-    from{
-        opacity:0;
-        transform:scale(.88);
-        letter-spacing:20px;
-    }
-    to{
-        opacity:1;
-        transform:scale(1);
-        letter-spacing:4px;
-    }
-}
-
-/* =========================================================
-   GLASS
-========================================================= */
-
-.glass{
-    margin:45px auto 0;
-    max-width:780px;
-    padding:35px;
-    border-radius:28px;
-    border:1px solid rgba(255,255,255,.1);
-    background:rgba(255,255,255,.045);
-    backdrop-filter:blur(18px);
-    box-shadow:0 30px 100px rgba(0,0,0,.35);
-}
-
-.quote{
-    font-family:'Playfair Display',serif;
-    font-size:30px;
-    line-height:1.5;
-}
-
-/* =========================================================
-   TIMELINE
-========================================================= */
-
-.timeline{
-    display:grid;
-    gap:15px;
-    margin-top:45px;
-    text-align:left;
-}
-
-.timeline-item{
-    display:flex;
-    gap:20px;
-    align-items:flex-start;
-    padding:23px;
-    border-left:1px solid rgba(210,170,255,.4);
-    background:rgba(255,255,255,.035);
-    border-radius:0 18px 18px 0;
-    transition:.35s;
-}
-
-.timeline-item:hover{
-    transform:translateX(8px);
-    background:rgba(255,255,255,.06);
-}
-
-.year{
-    color:#d0adff;
-    font-weight:700;
-    min-width:65px;
-}
-
-.timeline-item p{
-    color:#aaa4b0;
-    line-height:1.6;
-}
-
-/* =========================================================
-   STATS
-========================================================= */
-
-.stats{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:15px;
-    margin-top:40px;
-}
-
-.stat{
-    padding:25px 15px;
-    border:1px solid rgba(255,255,255,.09);
-    background:rgba(255,255,255,.04);
-    border-radius:20px;
-    transition:.35s;
-}
-
-.stat:hover{
-    transform:translateY(-8px);
-    background:rgba(255,255,255,.07);
-}
-
-.stat-number{
-    display:block;
-    font-family:'Playfair Display',serif;
-    font-size:34px;
-    color:#ecc7ff;
-    margin-bottom:8px;
-}
-
-.stat-label{
-    font-size:12px;
-    color:#88818f;
-}
-
-/* =========================================================
-   PATIENCE
-========================================================= */
-
-.meter{
-    margin-top:35px;
-    height:18px;
-    border-radius:20px;
-    background:rgba(255,255,255,.07);
     overflow:hidden;
 }
 
-.meter-fill{
-    height:100%;
-    width:0;
-    border-radius:20px;
-    background:linear-gradient(
-        90deg,
-        #a477ff,
-        #ffb6d5,
-        #ffe0a3
-    );
-    animation:fillMeter 3s ease forwards;
+.hero-content{
+    position:relative;
+    z-index:2;
 }
 
-@keyframes fillMeter{
-    to{width:100%}
-}
-
-.meter-text{
-    margin-top:14px;
-    color:#8e8795;
+.eyebrow{
     font-size:12px;
+    letter-spacing:5px;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:28px;
 }
 
-/* =========================================================
-   MUSIC SCENE
-========================================================= */
-
-.disc{
-    width:130px;
-    height:130px;
-    border-radius:50%;
-    margin:45px auto 25px;
-    background:
-        radial-gradient(
-            circle,
-            #151319 0 14%,
-            #d6b5ff 15% 17%,
-            #18151d 18% 40%,
-            #e2b8cf 41% 43%,
-            #121015 44%
-        );
-    box-shadow:0 0 60px rgba(220,170,255,.18);
-    animation:rotateDisc 7s linear infinite;
+.hero h1{
+    font-size:clamp(75px,17vw,190px);
+    line-height:.82;
+    letter-spacing:-6px;
+    background:linear-gradient(135deg,#fff 20%,#d5b9ff 48%,#ff73ad 78%,#ffd27d);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    animation:titleFloat 5s ease-in-out infinite;
 }
 
-@keyframes rotateDisc{
-    to{
-        transform:rotate(360deg);
-    }
+@keyframes titleFloat{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-8px)}
 }
 
-.music-note{
-    color:#77717e;
+.hero-line{
+    width:100px;
+    height:1px;
+    background:linear-gradient(90deg,transparent,var(--pink),transparent);
+    margin:35px auto;
+}
+
+.hero p{
+    max-width:600px;
+    margin:auto;
+    color:#bcb4c7;
+    line-height:1.8;
+}
+
+.start-btn{
+    margin-top:40px;
+    border:1px solid rgba(255,255,255,.18);
+    background:linear-gradient(135deg,rgba(157,108,255,.22),rgba(255,93,162,.16));
+    color:white;
+    padding:15px 26px;
+    border-radius:40px;
+    cursor:pointer;
+    font-weight:600;
+    transition:.3s;
+}
+
+.start-btn:hover{
+    transform:translateY(-3px);
+    box-shadow:0 15px 45px rgba(157,108,255,.2);
+}
+
+.scroll-hint{
+    position:absolute;
+    bottom:28px;
+    left:50%;
+    transform:translateX(-50%);
+    color:#777;
+    font-size:11px;
+    letter-spacing:3px;
+    text-transform:uppercase;
+}
+
+/* -------------------------
+   CHAPTER
+------------------------- */
+
+.chapter{
+    border-top:1px solid rgba(255,255,255,.06);
+}
+
+.chapter-number{
+    font-size:110px;
+    font-family:"Playfair Display",serif;
+    color:rgba(255,255,255,.035);
+    position:absolute;
+    right:5%;
+    top:50px;
+}
+
+/* -------------------------
+   MEMORY REEL
+------------------------- */
+
+.reel-wrap{
+    overflow:hidden;
+    margin-top:65px;
+    width:100%;
+}
+
+.reel{
+    display:flex;
+    gap:18px;
+    width:max-content;
+    animation:reelMove 55s linear infinite;
+}
+
+.reel:hover{
+    animation-play-state:paused;
+}
+
+.reel img{
+    width:190px;
+    height:260px;
+    object-fit:cover;
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,.1);
+    filter:saturate(.88);
+    transition:.4s;
+}
+
+.reel img:hover{
+    transform:scale(1.04) translateY(-10px);
+    filter:saturate(1.1);
+}
+
+@keyframes reelMove{
+    from{transform:translateX(0)}
+    to{transform:translateX(-50%)}
+}
+
+/* -------------------------
+   MEMORY SECTIONS
+------------------------- */
+
+.memory-section{
+    min-height:80vh;
+}
+
+.memory-heading{
+    display:flex;
+    justify-content:space-between;
+    align-items:end;
+    gap:30px;
+    margin-bottom:55px;
+}
+
+.memory-count{
+    color:#777;
     font-size:13px;
 }
 
-/* =========================================================
-   PHOTO ARCHIVE
-========================================================= */
-
-.archive-section{
-    padding-top:120px;
-    padding-bottom:120px;
-}
-
-.archive-intro{
-    margin-bottom:65px;
-}
-
-.photo-section{
-    margin-top:80px;
-}
-
-.photo-section-title{
-    text-align:left;
-    margin-bottom:25px;
-}
-
-.photo-section-title span{
-    display:block;
-    color:#81798b;
-    font-size:10px;
-    letter-spacing:4px;
-    margin-bottom:10px;
-}
-
-.photo-section-title h3{
-    font-family:'Playfair Display',serif;
-    font-size:38px;
-    font-weight:500;
-}
-
-/* Dynamic gallery */
-
-.gallery{
+.photo-grid{
     display:grid;
     grid-template-columns:repeat(12,1fr);
-    gap:14px;
+    gap:20px;
 }
 
 .photo-card{
@@ -537,431 +374,420 @@ h2{
     background:#111;
     cursor:pointer;
     opacity:0;
-    transform:translateY(40px) scale(.96);
+    transform:translateY(35px);
     transition:
         opacity .8s ease,
         transform .8s ease,
-        border-color .3s;
+        box-shadow .35s ease;
 }
 
 .photo-card.visible{
     opacity:1;
-    transform:translateY(0) scale(1);
+    transform:translateY(0);
 }
 
 .photo-card:hover{
-    border-color:rgba(255,255,255,.28);
-}
-
-.photo-card:nth-child(1),
-.photo-card:nth-child(4){
-    grid-column:span 7;
-    height:430px;
-}
-
-.photo-card:nth-child(2),
-.photo-card:nth-child(3){
-    grid-column:span 5;
-    height:430px;
-}
-
-.photo-card:nth-child(n+5){
-    grid-column:span 4;
-    height:340px;
+    box-shadow:0 25px 70px rgba(0,0,0,.45);
 }
 
 .photo-card img{
+    display:block;
     width:100%;
     height:100%;
     object-fit:cover;
-    display:block;
-    transition:transform .8s cubic-bezier(.2,.7,.2,1);
+    transition:transform .8s ease,filter .5s ease;
 }
 
 .photo-card:hover img{
     transform:scale(1.08);
+    filter:brightness(1.05);
 }
 
-.photo-overlay{
+.photo-card::after{
+    content:"";
     position:absolute;
-    inset:auto 0 0 0;
-    padding:60px 20px 20px;
-    background:linear-gradient(
-        transparent,
-        rgba(0,0,0,.78)
-    );
-    opacity:0;
-    transition:.35s;
+    inset:0;
+    background:linear-gradient(to top,rgba(0,0,0,.55),transparent 50%);
+    pointer-events:none;
 }
 
-.photo-card:hover .photo-overlay{
-    opacity:1;
+.group .photo-card:nth-child(1){
+    grid-column:span 7;
+    height:450px;
 }
 
-.photo-overlay span{
-    color:#fff;
+.group .photo-card:nth-child(2){
+    grid-column:span 5;
+    height:450px;
+}
+
+.group .photo-card:nth-child(3){
+    grid-column:span 4;
+    height:330px;
+}
+
+.group .photo-card:nth-child(4){
+    grid-column:span 4;
+    height:330px;
+}
+
+.group .photo-card:nth-child(5){
+    grid-column:span 4;
+    height:330px;
+}
+
+.bestie .photo-card{
+    grid-column:span 4;
+    height:460px;
+}
+
+.solo .photo-card:nth-child(1),
+.solo .photo-card:nth-child(7),
+.solo .photo-card:nth-child(11){
+    grid-column:span 6;
+    height:520px;
+}
+
+.solo .photo-card{
+    grid-column:span 3;
+    height:330px;
+}
+
+/* -------------------------
+   PHOTO LABEL
+------------------------- */
+
+.photo-label{
+    position:absolute;
+    z-index:2;
+    left:18px;
+    bottom:16px;
+    color:white;
     font-size:11px;
     letter-spacing:2px;
+    text-transform:uppercase;
 }
 
-.photo-number{
-    color:#aaa;
-    font-size:10px;
-    margin-top:5px;
+/* -------------------------
+   TIMELINE
+------------------------- */
+
+.timeline{
+    margin-top:65px;
+    position:relative;
 }
 
-/* =========================================================
-   FINAL MEMORY
-========================================================= */
-
-.final-memory{
-    max-width:850px;
-    margin:100px auto 0;
-    padding:45px;
-    border-radius:30px;
-    border:1px solid rgba(255,255,255,.1);
-    background:
-        radial-gradient(
-            circle at top,
-            rgba(200,150,255,.08),
-            transparent 60%
-        ),
-        rgba(255,255,255,.035);
+.timeline::before{
+    content:"";
+    position:absolute;
+    left:25px;
+    top:0;
+    bottom:0;
+    width:1px;
+    background:linear-gradient(var(--purple),var(--pink),transparent);
 }
 
-.final-memory h3{
-    font-family:'Playfair Display',serif;
-    font-size:40px;
-    margin-bottom:15px;
+.timeline-item{
+    position:relative;
+    padding:0 0 65px 75px;
 }
 
-.final-memory p{
-    color:#99929f;
+.timeline-dot{
+    position:absolute;
+    left:17px;
+    top:5px;
+    width:17px;
+    height:17px;
+    border-radius:50%;
+    background:var(--pink);
+    box-shadow:0 0 25px rgba(255,93,162,.55);
+}
+
+.timeline-year{
+    color:var(--gold);
+    font-size:12px;
+    letter-spacing:3px;
+    margin-bottom:12px;
+}
+
+.timeline h3{
+    font-size:32px;
+    margin-bottom:10px;
+}
+
+.timeline p{
+    color:var(--muted);
+    max-width:650px;
     line-height:1.8;
 }
 
-/* =========================================================
-   FULLSCREEN PHOTO VIEWER
-========================================================= */
+/* -------------------------
+   STATS
+------------------------- */
 
-.viewer{
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+    margin-top:50px;
+}
+
+.stat{
+    padding:30px;
+    border:1px solid var(--border);
+    background:var(--glass);
+    border-radius:20px;
+    backdrop-filter:blur(12px);
+}
+
+.stat strong{
+    display:block;
+    font-family:"Playfair Display",serif;
+    font-size:42px;
+    margin-bottom:8px;
+}
+
+.stat span{
+    color:#8f8998;
+    font-size:13px;
+}
+
+/* -------------------------
+   PATIENCE
+------------------------- */
+
+.meter{
+    margin-top:45px;
+    background:#17131c;
+    height:22px;
+    border-radius:30px;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,.08);
+}
+
+.meter-fill{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,var(--purple),var(--pink),var(--gold));
+    border-radius:30px;
+    transition:width 2s cubic-bezier(.2,.8,.2,1);
+}
+
+/* -------------------------
+   MUSIC SECTION
+------------------------- */
+
+.music-section{
+    text-align:center;
+}
+
+.disc{
+    width:190px;
+    height:190px;
+    margin:50px auto 30px;
+    border-radius:50%;
+    background:
+        radial-gradient(circle,#111 0 9%,transparent 10%),
+        repeating-radial-gradient(circle,#25202c 0 2px,#08070b 3px 8px);
+    border:2px solid rgba(255,255,255,.15);
+    box-shadow:0 0 70px rgba(157,108,255,.22);
+    animation:spin 8s linear infinite;
+    animation-play-state:paused;
+}
+
+.disc.playing{
+    animation-play-state:running;
+}
+
+@keyframes spin{
+    to{transform:rotate(360deg)}
+}
+
+.song-name{
+    color:#c5becd;
+    font-size:14px;
+}
+
+/* -------------------------
+   FINAL
+------------------------- */
+
+.final{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+}
+
+.final-inner{
+    max-width:850px;
+}
+
+.countdown{
+    font-family:"Playfair Display",serif;
+    font-size:clamp(90px,18vw,190px);
+    line-height:1;
+    min-height:190px;
+    background:linear-gradient(135deg,#fff,#d3b4ff,#ff6da8,#ffd27d);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+}
+
+.final h2{
+    margin-top:15px;
+}
+
+.typewriter{
+    min-height:70px;
+    max-width:650px;
+    margin:30px auto;
+    color:#bdb5c7;
+    line-height:1.8;
+}
+
+/* -------------------------
+   LIGHTBOX
+------------------------- */
+
+.lightbox{
     position:fixed;
     inset:0;
-    z-index:200;
+    background:rgba(0,0,0,.92);
+    backdrop-filter:blur(16px);
+    z-index:20000;
     display:none;
     align-items:center;
     justify-content:center;
     padding:30px;
-    background:rgba(0,0,0,.93);
-    backdrop-filter:blur(18px);
 }
 
-.viewer.active{
+.lightbox.open{
     display:flex;
 }
 
-.viewer img{
-    max-width:90vw;
-    max-height:82vh;
-    border-radius:18px;
+.lightbox img{
+    max-width:min(92vw,1100px);
+    max-height:88vh;
     object-fit:contain;
+    border-radius:14px;
     box-shadow:0 30px 100px rgba(0,0,0,.7);
 }
 
-.viewer-close,
-.viewer-prev,
-.viewer-next{
+.close-lightbox{
     position:absolute;
-    border:1px solid rgba(255,255,255,.15);
-    background:rgba(255,255,255,.08);
+    right:25px;
+    top:20px;
+    font-size:38px;
     color:white;
     cursor:pointer;
-    backdrop-filter:blur(10px);
+    font-weight:200;
 }
 
-.viewer-close{
-    top:25px;
-    right:25px;
-    width:45px;
-    height:45px;
-    border-radius:50%;
-    font-size:20px;
-}
-
-.viewer-prev,
-.viewer-next{
-    top:50%;
-    transform:translateY(-50%);
-    width:48px;
-    height:48px;
-    border-radius:50%;
-    font-size:22px;
-}
-
-.viewer-prev{
-    left:25px;
-}
-
-.viewer-next{
-    right:25px;
-}
-
-.viewer-caption{
-    position:absolute;
-    bottom:25px;
-    color:#aaa;
-    font-size:11px;
-    letter-spacing:3px;
-}
-
-/* =========================================================
-   SECRET POPUP
-========================================================= */
-
-.secret-popup{
-    position:fixed;
-    left:50%;
-    top:50%;
-    transform:translate(-50%,-50%) scale(.85);
-    z-index:250;
-    width:min(430px,90%);
-    padding:35px;
-    border-radius:25px;
-    border:1px solid rgba(255,255,255,.15);
-    background:rgba(15,13,20,.92);
-    backdrop-filter:blur(20px);
-    text-align:center;
-    opacity:0;
-    pointer-events:none;
-    transition:.4s;
-}
-
-.secret-popup.show{
-    opacity:1;
-    pointer-events:auto;
-    transform:translate(-50%,-50%) scale(1);
-}
-
-.secret-popup h3{
-    font-family:'Playfair Display',serif;
-    font-size:30px;
-    margin-bottom:15px;
-}
-
-.secret-popup p{
-    color:#aaa3b0;
-    line-height:1.7;
-}
-
-/* =========================================================
-   CAKE
-========================================================= */
-
-.cake{
-    font-size:90px;
-    cursor:pointer;
-    margin-top:35px;
-    display:inline-block;
-    transition:.35s;
-    filter:drop-shadow(0 0 25px rgba(255,190,220,.2));
-}
-
-.cake:hover{
-    transform:scale(1.12) rotate(-3deg);
-}
-
-.wish-text{
-    margin-top:15px;
-    color:#817987;
-    font-size:11px;
-    letter-spacing:3px;
-}
-
-/* =========================================================
-   FINAL
-========================================================= */
-
-.final{
-    min-height:100vh;
-    flex-direction:column;
-}
-
-.final h2{
-    font-size:clamp(45px,10vw,95px);
-}
-
-.reveal-btn{
-    opacity:1;
-    animation:none;
-}
-
-.countdown{
-    display:none;
-    font-family:'Playfair Display',serif;
-    font-size:clamp(90px,20vw,190px);
-    color:#ead7ff;
-    animation:countPulse 1s ease;
-}
-
-@keyframes countPulse{
-    from{
-        opacity:0;
-        transform:scale(1.5);
-    }
-    50%{
-        opacity:1;
-    }
-    to{
-        opacity:0;
-        transform:scale(.8);
-    }
-}
-
-.message{
-    display:none;
-    max-width:720px;
-    margin:40px auto 0;
-    animation:messageAppear 2s ease forwards;
-}
-
-@keyframes messageAppear{
-    from{
-        opacity:0;
-        transform:translateY(30px);
-    }
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-
-.typewriter{
-    color:#ddd7e2;
-    font-size:17px;
-    line-height:2;
-    white-space:pre-line;
-}
-
-.final-line{
-    margin-top:35px;
-    color:#f1c4db;
-    font-family:'Playfair Display',serif;
-    font-size:30px;
-}
-
-.signature{
-    margin-top:30px;
-    color:#817987;
-    font-size:13px;
-}
-
-/* =========================================================
+/* -------------------------
    CONFETTI
-========================================================= */
+------------------------- */
 
 #confetti{
     position:fixed;
     inset:0;
     pointer-events:none;
-    z-index:180;
+    z-index:15000;
 }
 
-/* =========================================================
+/* -------------------------
    FOOTER
-========================================================= */
+------------------------- */
 
 footer{
+    padding:50px 20px 70px;
     text-align:center;
-    padding:45px 25px;
-    color:#57525c;
-    font-size:11px;
+    color:#65606b;
+    font-size:12px;
     letter-spacing:1px;
 }
 
-/* =========================================================
+/* -------------------------
    MOBILE
-========================================================= */
+------------------------- */
 
-@media(max-width:750px){
+@media(max-width:800px){
 
     section{
-        padding:80px 18px;
+        padding:90px 6%;
+    }
+
+    .hero h1{
+        letter-spacing:-3px;
+    }
+
+    .memory-heading{
+        display:block;
+    }
+
+    .photo-grid{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+    }
+
+    .group .photo-card,
+    .bestie .photo-card,
+    .solo .photo-card,
+    .group .photo-card:nth-child(n),
+    .solo .photo-card:nth-child(n){
+        grid-column:span 1;
+        height:330px;
+    }
+
+    .group .photo-card:nth-child(1),
+    .solo .photo-card:nth-child(1){
+        grid-column:span 2;
+        height:430px;
     }
 
     .stats{
-        grid-template-columns:1fr 1fr;
+        grid-template-columns:1fr;
     }
 
-    .glass{
-        padding:25px 20px;
+    .reel img{
+        width:150px;
+        height:210px;
     }
 
-    .quote{
-        font-size:25px;
+    .music-label{
+        display:none;
+    }
+}
+
+@media(max-width:520px){
+
+    .photo-grid{
+        grid-template-columns:1fr;
     }
 
-    .description{
-        font-size:15px;
-    }
-
-    .gallery{
-        grid-template-columns:1fr 1fr;
-        gap:10px;
-    }
-
-    .photo-card,
-    .photo-card:nth-child(1),
-    .photo-card:nth-child(2),
-    .photo-card:nth-child(3),
-    .photo-card:nth-child(4),
-    .photo-card:nth-child(n+5){
+    .group .photo-card,
+    .bestie .photo-card,
+    .solo .photo-card,
+    .group .photo-card:nth-child(n),
+    .solo .photo-card:nth-child(n),
+    .group .photo-card:nth-child(1),
+    .solo .photo-card:nth-child(1){
         grid-column:span 1;
-        height:280px;
+        height:390px;
     }
 
-    .photo-card:nth-child(1),
-    .photo-card:nth-child(4){
-        grid-column:span 2;
-        height:350px;
+    .hero{
+        padding-left:20px;
+        padding-right:20px;
     }
 
-    .photo-overlay{
-        opacity:1;
-        padding:40px 12px 12px;
-    }
-
-    .photo-section-title h3{
-        font-size:30px;
+    .hero h1{
+        font-size:70px;
     }
 
     .timeline-item{
-        padding:18px;
-        gap:12px;
-    }
-
-    .year{
-        min-width:48px;
-    }
-
-    .viewer-prev{
-        left:10px;
-    }
-
-    .viewer-next{
-        right:10px;
-    }
-
-    .viewer img{
-        max-width:94vw;
-        max-height:75vh;
-    }
-
-    .final-memory{
-        padding:30px 22px;
-    }
-
-    .final-memory h3{
-        font-size:32px;
+        padding-left:55px;
     }
 }
 </style>
@@ -969,1354 +795,1044 @@ footer{
 
 <body>
 
-<div class="stars" id="stars"></div>
-<div class="grain"></div>
+<div class="progress" id="progress"></div>
 
-<button class="music-btn" id="musicBtn" onclick="toggleMusic()">🎧</button>
-<div class="music-label" id="musicLabel">LOVER — DILJIT DOSANJH 🎵</div>
+<div class="noise"></div>
+<div class="ambient one"></div>
+<div class="ambient two"></div>
 
-<button class="secret-btn" onclick="openSecret()">✦</button>
-
+<canvas id="stars"></canvas>
 <canvas id="confetti"></canvas>
 
-
-<!-- ======================================================
-     SECRET POPUP
-====================================================== -->
-
-<div class="secret-popup" id="secretPopup">
-
-    <h3>👀 You found it.</h3>
-
-    <p>
-        There was absolutely no reason for this button to exist.
-        <br><br>
-        But since you're here...
-        <br><br>
-        Happy Birthday, Vaachi. 😂💜
-    </p>
-
-    <button class="btn" onclick="closeSecret()">
-        Okay, I'm leaving 👀
-    </button>
-
+<!-- MUSIC -->
+<div class="music">
+    <span class="music-label">LOVER • click to play</span>
+    <button id="musicBtn" onclick="toggleMusic()">♫</button>
 </div>
 
+<audio id="bgMusic" src="LOVER.mp3" preload="metadata"></audio>
 
-<!-- ======================================================
+
+<!-- =========================
      HERO
-====================================================== -->
+========================= -->
 
 <section class="hero" id="top">
 
-    <div class="eyebrow opening">
-        A LITTLE STORY ABOUT TWO YEARS
-    </div>
+    <div class="hero-content">
 
-    <div class="opening delay">
-        SOME STORIES AREN'T PLANNED.<br>
-        THEY JUST HAPPEN.
-    </div>
+        <div class="eyebrow">A LITTLE STORY ABOUT TWO YEARS</div>
 
-    <h1>VAACHI</h1>
+        <h1>VAACHI</h1>
 
-    <div class="subtitle">
-        A tiny cinematic tribute to an unforgettable friendship. 🎬
-    </div>
-
-    <button class="btn" onclick="beginStory()">
-        ✨ Begin the story
-    </button>
-
-    <div class="scroll">
-        SCROLL TO CONTINUE ↓
-    </div>
-
-</section>
-
-
-<!-- ======================================================
-     CHAPTER 01
-====================================================== -->
-
-<section>
-
-<div class="container">
-
-    <div class="chapter-number">CHAPTER 01</div>
-
-    <h2>The School Years</h2>
-
-    <p class="description">
-        Somewhere between classes, random conversations,
-        school chaos and questionable decisions...
-        a friendship happened.
-    </p>
-
-    <div class="glass">
-
-        <div class="quote">
-            “Two years.<br>
-            Countless memories.<br>
-            And somehow... we're still here.”
-        </div>
-
-    </div>
-
-</div>
-
-</section>
-
-
-<!-- ======================================================
-     TIMELINE
-====================================================== -->
-
-<section>
-
-<div class="container">
-
-    <div class="chapter-number">CHAPTER 02</div>
-
-    <h2>The Timeline</h2>
-
-    <p class="description">
-        Two years isn't just a number.
-        It's a collection of tiny moments that somehow became memories.
-    </p>
-
-    <div class="timeline">
-
-        <div class="timeline-item">
-            <div class="year">YEAR 01</div>
-            <p>
-                The beginning. New conversations,
-                new jokes and the start of something neither
-                of us probably expected.
-            </p>
-        </div>
-
-        <div class="timeline-item">
-            <div class="year">YEAR 02</div>
-            <p>
-                More chaos. More stories.
-                More moments that somehow became unforgettable.
-            </p>
-        </div>
-
-        <div class="timeline-item">
-            <div class="year">TODAY</div>
-            <p>
-                Two years later, we're still collecting
-                memories one ridiculous moment at a time.
-            </p>
-        </div>
-
-    </div>
-
-</div>
-
-</section>
-
-
-<!-- ======================================================
-     VAACHI FILE
-====================================================== -->
-
-<section>
-
-<div class="container">
-
-    <div class="chapter-number">RESTRICTED ACCESS</div>
-
-    <h2>The VAACHI File</h2>
-
-    <p class="description">
-        Apparently someone opened a classified investigation.
-        The findings are... concerning. 👀
-    </p>
-
-    <div class="glass">
-
-        <div class="stats">
-
-            <div class="stat">
-                <span class="stat-number">V-02</span>
-                <span class="stat-label">FILE NUMBER</span>
-            </div>
-
-            <div class="stat">
-                <span class="stat-number">VAACHI</span>
-                <span class="stat-label">SUBJECT</span>
-            </div>
-
-            <div class="stat">
-                <span class="stat-number">NAMO</span>
-                <span class="stat-label">KNOWN ASSOCIATE</span>
-            </div>
-
-            <div class="stat">
-                <span class="stat-number">HIGH</span>
-                <span class="stat-label">CHAOS LEVEL</span>
-            </div>
-
-        </div>
-
-        <p style="margin-top:30px;color:#88818f;line-height:1.8;">
-            🔓 FILE UNLOCKED.<br><br>
-            Investigation conclusion:
-            two years of friendship have produced an unreasonable
-            amount of memories, jokes and nonsense.
-            <br><br>
-            Further investigation is strongly recommended. 😂
-        </p>
-
-    </div>
-
-</div>
-
-</section>
-
-
-<!-- ======================================================
-     LUNCH
-====================================================== -->
-
-<section>
-
-<div class="container">
-
-    <div class="chapter-number">SCHOOL FILE #001</div>
-
-    <h2>Between-Class Operations 🍱</h2>
-
-    <p class="description">
-        Mission: have lunch.<br>
-        Location: between classes.<br>
-        Strategy: absolutely no strategy.
-    </p>
-
-    <div class="glass">
-
-        <div class="stats">
-
-            <div class="stat">
-                <span class="stat-number">∞</span>
-                <span class="stat-label">LUNCH MISSIONS</span>
-            </div>
-
-            <div class="stat">
-                <span class="stat-number">2/10</span>
-                <span class="stat-label">STEALTH LEVEL</span>
-            </div>
-
-            <div class="stat">
-                <span class="stat-number">100%</span>
-                <span class="stat-label">GETTING CAUGHT</span>
-            </div>
-
-            <div class="stat">
-                <span class="stat-number">😂</span>
-                <span class="stat-label">WORTH IT</span>
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-</section>
-
-
-<!-- ======================================================
-     FRIENDSHIP STATS
-====================================================== -->
-
-<section>
-
-<div class="container">
-
-    <div class="chapter-number">OFFICIAL RECORD</div>
-
-    <h2>Friendship Stats</h2>
-
-    <div class="stats">
-
-        <div class="stat">
-            <span class="stat-number">2</span>
-            <span class="stat-label">YEARS</span>
-        </div>
-
-        <div class="stat">
-            <span class="stat-number">∞</span>
-            <span class="stat-label">RANDOM CONVERSATIONS</span>
-        </div>
-
-        <div class="stat">
-            <span class="stat-number">100%</span>
-            <span class="stat-label">SECRETS KEPT</span>
-        </div>
-
-        <div class="stat">
-            <span class="stat-number">MAX</span>
-            <span class="stat-label">CHAOS LEVEL</span>
-        </div>
-
-    </div>
-
-</div>
-
-</section>
-
-
-<!-- ======================================================
-     PATIENCE
-====================================================== -->
-
-<section>
-
-<div class="container">
-
-    <div class="chapter-number">CHAPTER 03</div>
-
-    <h2>Legendary Patience 😂</h2>
-
-    <p class="description">
-        Two years of putting up with my nonsense
-        deserves its own achievement.
-    </p>
-
-    <div class="glass">
-
-        <div style="color:#aaa;margin-bottom:10px;">
-            VAACHI'S PATIENCE
-        </div>
-
-        <div class="meter">
-            <div class="meter-fill"></div>
-        </div>
-
-        <div class="meter-text">
-            100% COMPLETE — SOMEHOW STILL SURVIVING
-        </div>
-
-    </div>
-
-</div>
-
-</section>
-
-
-<!-- ======================================================
-     MUSIC
-====================================================== -->
-
-<section>
-
-<div class="container">
-
-    <div class="chapter-number">BONUS SCENE 🎧</div>
-
-    <h2>Main Character Energy</h2>
-
-    <p class="description">
-        Every main character needs a soundtrack.
-        And this one has a soundtrack. 👀
-    </p>
-
-    <div class="disc"></div>
-
-    <div class="music-note">
-        🎧 LOVER — CINEMATIC MODE
-    </div>
-
-    <button class="btn" onclick="toggleMusic()">
-        🎵 Toggle Lover
-    </button>
-
-</div>
-
-</section>
-
-
-<!-- ======================================================
-     PHOTO ARCHIVE
-====================================================== -->
-
-<section class="archive-section">
-
-<div class="container">
-
-    <div class="chapter-number">THE ARCHIVE</div>
-
-    <h2>21 Memories.</h2>
-
-    <p class="description archive-intro">
-        Different people. Different moments.
-        Same two years of chaos. 📸
-        <br><br>
-        Click any photo.
-    </p>
-
-
-    <!-- GROUP -->
-    <div class="photo-section">
-
-        <div class="photo-section-title">
-
-            <span>FILE 01</span>
-
-            <h3>The Chaos Archive 👥</h3>
-
-        </div>
-
-        <div class="gallery">
-
-            <div class="photo-card">
-                <img src="photo6.jpg" alt="Memory 6">
-                <div class="photo-overlay">
-                    <span>THE CHAOS ARCHIVE</span>
-                    <div class="photo-number">MEMORY 06</div>
-                </div>
-            </div>
-
-            <div class="photo-card">
-                <img src="photo8.jpg" alt="Memory 8">
-                <div class="photo-overlay">
-                    <span>THE CHAOS ARCHIVE</span>
-                    <div class="photo-number">MEMORY 08</div>
-                </div>
-            </div>
-
-            <div class="photo-card">
-                <img src="photo9.jpg" alt="Memory 9">
-                <div class="photo-overlay">
-                    <span>THE CHAOS ARCHIVE</span>
-                    <div class="photo-number">MEMORY 09</div>
-                </div>
-            </div>
-
-            <div class="photo-card">
-                <img src="photo7.jpg" alt="Memory 7">
-                <div class="photo-overlay">
-                    <span>THE CHAOS ARCHIVE</span>
-                    <div class="photo-number">MEMORY 07</div>
-                </div>
-            </div>
-
-            <div class="photo-card">
-                <img src="photo5.jpg" alt="Memory 5">
-                <div class="photo-overlay">
-                    <span>THE CHAOS ARCHIVE</span>
-                    <div class="photo-number">MEMORY 05</div>
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- BESTIE -->
-    <div class="photo-section">
-
-        <div class="photo-section-title">
-
-            <span>FILE 02</span>
-
-            <h3>The Bestie Files 🫶</h3>
-
-        </div>
-
-        <div class="gallery">
-
-            <div class="photo-card">
-                <img src="photo4.jpg" alt="Memory 4">
-                <div class="photo-overlay">
-                    <span>BESTIE FILE</span>
-                    <div class="photo-number">MEMORY 04</div>
-                </div>
-            </div>
-
-            <div class="photo-card">
-                <img src="photo2.jpg" alt="Memory 2">
-                <div class="photo-overlay">
-                    <span>BESTIE FILE</span>
-                    <div class="photo-number">MEMORY 02</div>
-                </div>
-            </div>
-
-            <div class="photo-card">
-                <img src="photo1.jpg" alt="Memory 1">
-                <div class="photo-overlay">
-                    <span>BESTIE FILE</span>
-                    <div class="photo-number">MEMORY 01</div>
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- SOLO -->
-    <div class="photo-section">
-
-        <div class="photo-section-title">
-
-            <span>FILE 03</span>
-
-            <h3>The Main Character Files ✨</h3>
-
-        </div>
-
-        <div class="gallery">
-
-            <div class="photo-card">
-                <img src="photo22.jpg" alt="Memory 22">
-                <div class="photo-overlay">
-                    <span>MAIN CHARACTER</span>
-                    <div class="photo-number">MEMORY 22</div>
-                </div>
-            </div>
-
-            <div class="photo-card">
-                <img src="photo21.jpg" alt="Memory 21">
-                <div class="photo-overlay">
-                    <span>MAIN CHARACTER</span>
-                    <div class="photo-number">MEMORY 21</div>
-                </div>
-            </div>
-
-            <div class="photo-card">
-                <img src="photo20.jpg" alt="Memory 20">
-                <div class="photo-overlay">
-                    <span>MAIN CHARACTER</span>
-                    <div class="photo-number">MEMORY 20</div>
-                </div>
-            </div>
-
-            <div class="photo-card">
-                <img src="photo13.jpg" alt="Memory 13">
-                <div class="photo-overlay">
-                    <span>MAIN CHARACTER</span>
-                    <div class="photo-number">MEMORY 13</div>
-                </div>
-            </div>
-
-            <div class="photo-card">
-                <img src="photo14.jpg" alt="Memory 14">
-                <div class="photo-overlay">
-                    <span>MAIN CHARACTER</span>
-                    <div class="photo-number">MEMORY 14</div>
-                </div>
-            </div>
-
-            <div class="photo-card">
-                <img src="photo17.jpg" alt="Memory 17">
-                <div class="photo-overlay">
-                    <span>MAIN CHARACTER</span>
-                    <div class="photo-number">MEMORY 17</div>
-                </div>
-            </div>
-
-            <div class="photo-card">
-                <img src="photo15.jpg" alt="Memory 15">
-                <div class="photo-overlay">
-                    <span>MAIN CHARACTER</span>
-                    <div class="photo-number">MEMORY 15</div>
-                </div>
-            </div>
-
-            <div class="photo-card">
-                <img src="photo16.jpg" alt="Memory 16">
-                <div class="photo-overlay">
-                    <span>MAIN CHARACTER</span>
-                    <div class="photo-number">MEMORY 16</div>
-                </div>
-            </div>
-
-            <div class="photo-card">
-                <img src="photo19.jpg" alt="Memory 19">
-                <div class="photo-overlay">
-                    <span>MAIN CHARACTER</span>
-                    <div class="photo-number">MEMORY 19</div>
-                </div>
-            </div>
-
-            <div class="photo-card">
-                <img src="photo11.jpg" alt="Memory 11">
-                <div class="photo-overlay">
-                    <span>MAIN CHARACTER</span>
-                    <div class="photo-number">MEMORY 11</div>
-                </div>
-            </div>
-
-            <div class="photo-card">
-                <img src="photo10.jpg" alt="Memory 10">
-                <div class="photo-overlay">
-                    <span>MAIN CHARACTER</span>
-                    <div class="photo-number">MEMORY 10</div>
-                </div>
-            </div>
-
-            <div class="photo-card">
-                <img src="photo12.jpg" alt="Memory 12">
-                <div class="photo-overlay">
-                    <span>MAIN CHARACTER</span>
-                    <div class="photo-number">MEMORY 12</div>
-                </div>
-            </div>
-
-            <div class="photo-card">
-                <img src="photo3.jpg" alt="Memory 3">
-                <div class="photo-overlay">
-                    <span>MAIN CHARACTER</span>
-                    <div class="photo-number">MEMORY 03</div>
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="final-memory">
-
-        <h3>And that's only the archive.</h3>
+        <div class="hero-line"></div>
 
         <p>
-            There are probably hundreds of memories that never made it
-            into these photos. That's kind of the point.
-            <br><br>
-            The best moments usually aren't planned enough to be photographed.
+            Some friendships don't need a grand beginning.
+            They just quietly become some of the best chapters
+            of your life.
+        </p>
+
+        <button class="start-btn" onclick="startExperience()">
+            Begin the story ↓
+        </button>
+
+    </div>
+
+    <div class="scroll-hint">
+        Scroll to remember
+    </div>
+
+</section>
+
+
+<!-- =========================
+     CHAPTER 01
+========================= -->
+
+<section class="chapter">
+
+    <div class="chapter-number">01</div>
+
+    <div class="container">
+
+        <div class="kicker">Chapter One</div>
+
+        <h2>The School Years</h2>
+
+        <p class="subtitle">
+            Somewhere between classes, random conversations,
+            lunch breaks and completely unnecessary chaos,
+            a friendship happened.
+        </p>
+
+        <div class="reel-wrap">
+
+            <div class="reel" id="reel"></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     TIMELINE
+========================= -->
+
+<section>
+
+    <div class="container">
+
+        <div class="kicker">The Timeline</div>
+
+        <h2>Two years.<br>Countless moments.</h2>
+
+        <div class="timeline">
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+
+                <div class="timeline-year">YEAR 01</div>
+
+                <h3>The beginning.</h3>
+
+                <p>
+                    A normal school year slowly turned into
+                    something much more memorable.
+                </p>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+
+                <div class="timeline-year">YEAR 02</div>
+
+                <h3>The chaos.</h3>
+
+                <p>
+                    More memories. More inside jokes.
+                    More moments that somehow became stories.
+                </p>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+
+                <div class="timeline-year">TODAY</div>
+
+                <h3>Still here.</h3>
+
+                <p>
+                    And somehow, after everything,
+                    the story keeps going.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     GROUP MEMORIES
+========================= -->
+
+<section class="memory-section">
+
+    <div class="container">
+
+        <div class="memory-heading">
+
+            <div>
+                <div class="kicker">The Archive • 01</div>
+                <h2>The Crew.</h2>
+
+                <p class="subtitle">
+                    Proof that school wasn't only about studying.
+                </p>
+            </div>
+
+            <div class="memory-count">05 MEMORIES</div>
+
+        </div>
+
+        <div class="photo-grid group" id="groupGrid"></div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     BESTIE
+========================= -->
+
+<section class="memory-section">
+
+    <div class="container">
+
+        <div class="memory-heading">
+
+            <div>
+                <div class="kicker">The Archive • 02</div>
+                <h2>The Bestie Files.</h2>
+
+                <p class="subtitle">
+                    Some people just become part of the story.
+                </p>
+            </div>
+
+            <div class="memory-count">03 MEMORIES</div>
+
+        </div>
+
+        <div class="photo-grid bestie" id="bestieGrid"></div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     LUNCH / STATS
+========================= -->
+
+<section>
+
+    <div class="container">
+
+        <div class="kicker">Classified Information 🍱</div>
+
+        <h2>Between-Class<br>Operations.</h2>
+
+        <p class="subtitle">
+            Highly important school activities.
+            Absolutely no studying involved.
+        </p>
+
+        <div class="stats">
+
+            <div class="stat">
+                <strong>∞</strong>
+                <span>Random conversations</span>
+            </div>
+
+            <div class="stat">
+                <strong>100%</strong>
+                <span>Unnecessary chaos</span>
+            </div>
+
+            <div class="stat">
+                <strong>2Y+</strong>
+                <span>Memories collected</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     SOLO
+========================= -->
+
+<section class="memory-section">
+
+    <div class="container">
+
+        <div class="memory-heading">
+
+            <div>
+                <div class="kicker">The Archive • 03</div>
+                <h2>Main Character.</h2>
+
+                <p class="subtitle">
+                    Because every story needs its main character.
+                </p>
+            </div>
+
+            <div class="memory-count">13 MEMORIES</div>
+
+        </div>
+
+        <div class="photo-grid solo" id="soloGrid"></div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     PATIENCE
+========================= -->
+
+<section>
+
+    <div class="container">
+
+        <div class="kicker">Scientific Research</div>
+
+        <h2>Legendary<br>Patience 😂</h2>
+
+        <p class="subtitle">
+            After approximately two years of friendship,
+            the research department has reached a conclusion.
+        </p>
+
+        <div class="meter">
+            <div class="meter-fill" id="patienceMeter"></div>
+        </div>
+
+        <p style="margin-top:15px;color:#777;font-size:12px;">
+            Loading friendship tolerance...
         </p>
 
     </div>
 
-</div>
+</section>
+
+
+<!-- =========================
+     MUSIC
+========================= -->
+
+<section class="music-section">
+
+    <div class="container">
+
+        <div class="kicker">Soundtrack</div>
+
+        <h2>Main Character Energy.</h2>
+
+        <div class="disc" id="disc"></div>
+
+        <div class="song-name">
+            ♫ LOVER
+        </div>
+
+        <p class="subtitle" style="margin-left:auto;margin-right:auto;">
+            Every good memory deserves a soundtrack.
+        </p>
+
+    </div>
 
 </section>
 
 
-<!-- ======================================================
-     WISH SCENE
-====================================================== -->
-
-<section>
-
-<div class="container">
-
-    <div class="chapter-number">BEFORE THE FINAL CHAPTER</div>
-
-    <h2>One Last Thing... 🎂</h2>
-
-    <p class="description">
-        Every birthday movie needs a cake.
-    </p>
-
-    <div class="cake" onclick="makeWish()">
-        🎂
-    </div>
-
-    <div class="wish-text">
-        ✨ CLICK THE CAKE TO MAKE A WISH ✨
-    </div>
-
-</div>
-
-</section>
-
-
-<!-- ======================================================
+<!-- =========================
      FINAL
-====================================================== -->
+========================= -->
 
-<section class="final">
+<section class="final" id="final">
 
-<div class="container">
+    <div class="final-inner">
 
-    <div class="eyebrow">
-        THE FINAL CHAPTER
-    </div>
+        <div class="kicker">One last thing...</div>
 
-    <h2>
-        Happy Birthday,<br>
-        Vaachi! 🎂
-    </h2>
+        <div class="countdown" id="countdown">3</div>
 
-    <button class="btn reveal-btn" onclick="startReveal()">
-        💌 Open your birthday message
-    </button>
+        <h2>Happy Birthday, Vaachi! 🎂</h2>
 
-    <div class="countdown" id="countdown"></div>
+        <div class="typewriter" id="message"></div>
 
-    <div class="message" id="message">
-
-        <div class="typewriter" id="typewriter"></div>
-
-        <div class="final-line">
-            Happy Birthday, Vaachi. 🎂✨
-        </div>
-
-        <div class="signature">
-            — From your fellow lunch criminal 😂
-        </div>
+        <button class="start-btn" onclick="celebrate()">
+            ✨ Make Some Noise
+        </button>
 
     </div>
-
-</div>
 
 </section>
 
 
 <footer>
-
-    VAACHI — THE BIRTHDAY CUT 🎬
-
-    <br><br>
-
-    Written by Namo · Directed by questionable decisions
-    · Produced by school chaos
-    · Special thanks to lunch breaks
-
-    <br><br>
-
-    Soundtrack: LOVER 🎧
-
-    <br><br>
-
-    THE END.
-    <br>
-    ...probably not. 👀
-
+    Made with memories, chaos & a suspicious amount of school-time energy. ❤️
 </footer>
 
 
-<!-- ======================================================
-     FULLSCREEN VIEWER
-====================================================== -->
+<!-- LIGHTBOX -->
 
-<div class="viewer" id="viewer">
-
-    <button class="viewer-close" onclick="closeViewer()">✕</button>
-
-    <button class="viewer-prev" onclick="previousPhoto()">‹</button>
-
-    <img id="viewerImage" src="" alt="Memory">
-
-    <button class="viewer-next" onclick="nextPhoto()">›</button>
-
-    <div class="viewer-caption" id="viewerCaption">
-        MEMORY
-    </div>
-
+<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+    <div class="close-lightbox">×</div>
+    <img id="lightboxImg" src="" alt="Memory">
 </div>
 
 
-<!-- ======================================================
-     SCRIPT
-====================================================== -->
-
 <script>
 
-/* =========================================================
-   STARS
-========================================================= */
+/* ==========================================
+   PHOTO DATA
+========================================== */
 
-const stars = document.getElementById("stars");
+const groupPhotos = [6,8,9,7,5];
 
-for(let i=0;i<150;i++){
+const bestiePhotos = [4,2,1];
 
-    const star = document.createElement("div");
+const soloPhotos = [
+    22,21,20,13,14,17,15,16,19,11,10,12,3
+];
 
-    star.className = "star";
-
-    star.style.left = Math.random()*100 + "%";
-    star.style.top = Math.random()*100 + "%";
-    star.style.animationDelay = Math.random()*4 + "s";
-
-    stars.appendChild(star);
+function photo(number){
+    return `photo${number}.jpg`;
 }
 
 
-/* =========================================================
-   BEGIN STORY
-========================================================= */
+/* ==========================================
+   CREATE PHOTO CARD
+========================================== */
 
-function beginStory(){
+function createCard(number, index){
 
-    window.scrollTo({
-        top:window.innerHeight,
-        behavior:"smooth"
+    const card = document.createElement("div");
+
+    card.className = "photo-card";
+
+    card.innerHTML = `
+        <img src="${photo(number)}"
+             loading="lazy"
+             alt="Memory ${number}">
+        <div class="photo-label">
+            MEMORY ${String(index + 1).padStart(2,"0")}
+        </div>
+    `;
+
+    card.addEventListener("click",()=>{
+        openLightbox(photo(number));
+    });
+
+    return card;
+}
+
+
+/* ==========================================
+   LOAD GALLERIES
+========================================== */
+
+function loadGallery(id, photos){
+
+    const grid = document.getElementById(id);
+
+    photos.forEach((number,index)=>{
+        grid.appendChild(createCard(number,index));
     });
 
 }
 
+loadGallery("groupGrid",groupPhotos);
+loadGallery("bestieGrid",bestiePhotos);
+loadGallery("soloGrid",soloPhotos);
 
-/* =========================================================
-   MUSIC — LOVER.MP3
-========================================================= */
 
-const music = new Audio("LOVER.mp3");
+/* ==========================================
+   MEMORY REEL
+========================================== */
 
-music.loop = true;
-music.volume = 0.45;
+const reel = document.getElementById("reel");
 
-let musicPlaying = false;
+const reelPhotos = [
+    ...groupPhotos,
+    ...bestiePhotos,
+    ...soloPhotos
+];
 
-function toggleMusic(){
+function addReelPhotos(){
 
-    const button = document.getElementById("musicBtn");
-    const label = document.getElementById("musicLabel");
+    reelPhotos.forEach(number=>{
 
-    if(!musicPlaying){
+        const img = document.createElement("img");
 
-        music.play()
-        .then(()=>{
+        img.src = photo(number);
+        img.loading = "lazy";
 
-            musicPlaying = true;
+        img.onclick = ()=>{
+            openLightbox(photo(number));
+        };
 
-            button.textContent = "🔊";
+        reel.appendChild(img);
 
-            label.classList.add("show");
-
-            setTimeout(()=>{
-                label.classList.remove("show");
-            },2500);
-
-        })
-        .catch(()=>{
-
-            alert(
-                "Tap the music button once more to start Lover 🎵"
-            );
-
-        });
-
-    }else{
-
-        music.pause();
-
-        musicPlaying = false;
-
-        button.textContent = "🎧";
-
-        label.classList.remove("show");
-
-    }
+    });
 
 }
 
+addReelPhotos();
 
-/* =========================================================
-   SCROLL REVEAL
-========================================================= */
 
-const photoCards =
-document.querySelectorAll(".photo-card");
+/* Duplicate for seamless animation */
 
-const observer =
-new IntersectionObserver(
+reelPhotos.forEach(number=>{
 
+    const img = document.createElement("img");
+
+    img.src = photo(number);
+    img.loading = "lazy";
+
+    img.onclick = ()=>{
+        openLightbox(photo(number));
+    };
+
+    reel.appendChild(img);
+
+});
+
+
+/* ==========================================
+   SCROLL PROGRESS
+========================================== */
+
+window.addEventListener("scroll",()=>{
+
+    const scrollTop =
+        document.documentElement.scrollTop;
+
+    const scrollHeight =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
+
+    const percentage =
+        (scrollTop / scrollHeight) * 100;
+
+    document.getElementById("progress")
+        .style.width = percentage + "%";
+
+});
+
+
+/* ==========================================
+   REVEAL ANIMATION
+========================================== */
+
+const observer = new IntersectionObserver(
     entries => {
 
-        entries.forEach(entry => {
+        entries.forEach(entry=>{
 
             if(entry.isIntersecting){
 
                 entry.target.classList.add("visible");
-
-                observer.unobserve(entry.target);
 
             }
 
         });
 
     },
-
     {
         threshold:.12
     }
-
 );
 
-photoCards.forEach(card=>{
-    observer.observe(card);
-});
+function observePhotos(){
+
+    document.querySelectorAll(".photo-card")
+        .forEach(card=>observer.observe(card));
+
+}
+
+setTimeout(observePhotos,300);
 
 
-/* =========================================================
-   PHOTO VIEWER
-========================================================= */
+/* ==========================================
+   PATIENCE METER
+========================================== */
 
-const viewer =
-document.getElementById("viewer");
+const meterObserver = new IntersectionObserver(
+    entries => {
 
-const viewerImage =
-document.getElementById("viewerImage");
+        entries.forEach(entry=>{
 
-const viewerCaption =
-document.getElementById("viewerCaption");
+            if(entry.isIntersecting){
 
-const photoList = [
+                setTimeout(()=>{
+                    document.getElementById("patienceMeter")
+                        .style.width = "97%";
+                },300);
 
-    "photo6.jpg",
-    "photo8.jpg",
-    "photo9.jpg",
-    "photo7.jpg",
-    "photo5.jpg",
+                meterObserver.disconnect();
 
-    "photo4.jpg",
-    "photo2.jpg",
-    "photo1.jpg",
+            }
 
-    "photo22.jpg",
-    "photo21.jpg",
-    "photo20.jpg",
-    "photo13.jpg",
-    "photo14.jpg",
-    "photo17.jpg",
-    "photo15.jpg",
-    "photo16.jpg",
-    "photo19.jpg",
-    "photo11.jpg",
-    "photo10.jpg",
-    "photo12.jpg",
-    "photo3.jpg"
+        });
 
-];
+    },
+    {threshold:.4}
+);
 
-let currentPhoto = 0;
-
-photoCards.forEach((card,index)=>{
-
-    card.addEventListener("click",()=>{
-
-        currentPhoto = index;
-
-        openViewer();
-
-    });
-
-});
+meterObserver.observe(
+    document.getElementById("patienceMeter")
+);
 
 
-function openViewer(){
+/* ==========================================
+   MUSIC
+========================================== */
 
-    viewer.classList.add("active");
+const music = document.getElementById("bgMusic");
+const musicBtn = document.getElementById("musicBtn");
+const disc = document.getElementById("disc");
 
-    viewerImage.src = photoList[currentPhoto];
+let playing = false;
 
-    viewerCaption.textContent =
-        "MEMORY " +
-        photoList[currentPhoto]
-        .replace("photo","")
-        .replace(".jpg","");
+function toggleMusic(){
+
+    if(!playing){
+
+        music.play()
+            .then(()=>{
+
+                playing = true;
+
+                musicBtn.textContent = "❚❚";
+
+                disc.classList.add("playing");
+
+            })
+            .catch(()=>{
+
+                alert("Click again to start the music 🎵");
+
+            });
+
+    }else{
+
+        music.pause();
+
+        playing = false;
+
+        musicBtn.textContent = "♫";
+
+        disc.classList.remove("playing");
+
+    }
+
+}
+
+
+/* ==========================================
+   START EXPERIENCE
+========================================== */
+
+function startExperience(){
+
+    if(!playing){
+
+        music.play()
+            .then(()=>{
+
+                playing = true;
+
+                musicBtn.textContent = "❚❚";
+
+                disc.classList.add("playing");
+
+            })
+            .catch(()=>{});
+
+    }
+
+    document.getElementById("top")
+        .nextElementSibling
+        .scrollIntoView({
+            behavior:"smooth"
+        });
+
+}
+
+
+/* ==========================================
+   LIGHTBOX
+========================================== */
+
+function openLightbox(src){
+
+    const box = document.getElementById("lightbox");
+
+    document.getElementById("lightboxImg")
+        .src = src;
+
+    box.classList.add("open");
 
     document.body.style.overflow = "hidden";
 
 }
 
+function closeLightbox(event){
 
-function closeViewer(){
+    if(
+        event.target.id === "lightbox" ||
+        event.target.classList.contains("close-lightbox")
+    ){
 
-    viewer.classList.remove("active");
+        document.getElementById("lightbox")
+            .classList.remove("open");
 
-    document.body.style.overflow = "";
+        document.body.style.overflow = "";
 
-}
-
-
-function nextPhoto(){
-
-    currentPhoto++;
-
-    if(currentPhoto >= photoList.length){
-        currentPhoto = 0;
     }
 
-    viewerImage.src = photoList[currentPhoto];
-
-    viewerCaption.textContent =
-        "MEMORY " +
-        photoList[currentPhoto]
-        .replace("photo","")
-        .replace(".jpg","");
-
 }
-
-
-function previousPhoto(){
-
-    currentPhoto--;
-
-    if(currentPhoto < 0){
-        currentPhoto = photoList.length - 1;
-    }
-
-    viewerImage.src = photoList[currentPhoto];
-
-    viewerCaption.textContent =
-        "MEMORY " +
-        photoList[currentPhoto]
-        .replace("photo","")
-        .replace(".jpg","");
-
-}
-
-
-/* =========================================================
-   KEYBOARD PHOTO NAVIGATION
-========================================================= */
 
 document.addEventListener("keydown",event=>{
 
-    if(!viewer.classList.contains("active")){
-        return;
-    }
-
     if(event.key === "Escape"){
-        closeViewer();
-    }
 
-    if(event.key === "ArrowRight"){
-        nextPhoto();
-    }
+        document.getElementById("lightbox")
+            .classList.remove("open");
 
-    if(event.key === "ArrowLeft"){
-        previousPhoto();
+        document.body.style.overflow = "";
+
     }
 
 });
 
 
-/* =========================================================
-   SECRET BUTTON
-========================================================= */
-
-function openSecret(){
-
-    document
-        .getElementById("secretPopup")
-        .classList.add("show");
-
-}
-
-
-function closeSecret(){
-
-    document
-        .getElementById("secretPopup")
-        .classList.remove("show");
-
-}
-
-
-/* =========================================================
-   CAKE WISH
-========================================================= */
-
-function makeWish(){
-
-    launchConfetti();
-
-    const cake =
-        document.querySelector(".cake");
-
-    cake.textContent = "✨🎂✨";
-
-    setTimeout(()=>{
-
-        cake.textContent = "🎂";
-
-    },2500);
-
-}
-
-
-/* =========================================================
-   FINAL MESSAGE
-========================================================= */
-
-const messageText = `
-Two years.
-
-It honestly feels weird saying that because somehow,
-in those two years, we've managed to collect enough
-memories, jokes, random conversations and absolute
-chaos to make it feel like we've known each other
-for much longer. 😂
-
-From our legendary attempts to have lunch between
-classes without getting caught, to all the secrets
-you somehow know, you've become a pretty important
-part of my school memories.
-
-And somehow, you've survived two years of my nonsense.
-Honestly... that deserves a trophy. 🏆😂
-
-But jokes aside, I wanted to make something special
-for you today.
-
-Because some friendships don't need a huge explanation.
-They just become a part of your everyday life,
-and then one day you realize how many memories
-you've made together.
-
-I hope this next year brings you loads of happiness,
-amazing experiences, great people and plenty of
-reasons to smile.
-
-Keep being yourself, keep enjoying your music,
-keep creating memories, and keep being the person
-you are.
-
-Here's to the two years we've already had...
-
-and all the memories still waiting to happen.
-`;
-
-
-/* =========================================================
+/* ==========================================
    COUNTDOWN
-========================================================= */
+========================================== */
 
-function startReveal(){
+let countdownStarted = false;
 
-    const button =
-        document.querySelector(".reveal-btn");
+const countdownObserver = new IntersectionObserver(
+    entries => {
 
-    const countdown =
-        document.getElementById("countdown");
+        entries.forEach(entry=>{
 
-    button.style.display = "none";
+            if(entry.isIntersecting && !countdownStarted){
 
-    countdown.style.display = "block";
+                countdownStarted = true;
 
-    let number = 3;
-
-    countdown.textContent = number;
-
-    const timer =
-        setInterval(()=>{
-
-            number--;
-
-            if(number > 0){
-
-                countdown.style.animation = "none";
-
-                void countdown.offsetWidth;
-
-                countdown.style.animation =
-                    "countPulse 1s ease";
-
-                countdown.textContent = number;
-
-            }else{
-
-                clearInterval(timer);
-
-                countdown.textContent = "✨";
-
-                setTimeout(()=>{
-
-                    countdown.style.display = "none";
-
-                    showMessage();
-
-                    launchConfetti();
-
-                },900);
+                runCountdown();
 
             }
 
-        },1000);
+        });
 
-}
+    },
+    {threshold:.5}
+);
+
+countdownObserver.observe(
+    document.getElementById("countdown")
+);
 
 
-/* =========================================================
-   TYPEWRITER
-========================================================= */
+function runCountdown(){
 
-function showMessage(){
+    const element =
+        document.getElementById("countdown");
 
-    const message =
-        document.getElementById("message");
-
-    message.style.display = "block";
-
-    const target =
-        document.getElementById("typewriter");
-
-    target.textContent = "";
+    const numbers = ["3","2","1","✨"];
 
     let index = 0;
 
-    function type(){
+    element.textContent = numbers[index];
 
-        if(index < messageText.length){
+    const interval = setInterval(()=>{
 
-            target.textContent +=
-                messageText.charAt(index);
+        index++;
 
-            index++;
+        if(index >= numbers.length){
 
-            setTimeout(type,18);
+            clearInterval(interval);
+
+            element.textContent = "🎂";
+
+            typeMessage();
+
+            return;
 
         }
 
-    }
+        element.textContent = numbers[index];
 
-    type();
-
-    setTimeout(()=>{
-
-        message.scrollIntoView({
-            behavior:"smooth",
-            block:"center"
-        });
-
-    },500);
+    },900);
 
 }
 
 
-/* =========================================================
+/* ==========================================
+   TYPEWRITER
+========================================== */
+
+function typeMessage(){
+
+    const message =
+        "Two years of memories, random chaos, school stories, inside jokes and moments that somehow became unforgettable. Here's to another chapter. Happy Birthday! ❤️";
+
+    const element =
+        document.getElementById("message");
+
+    let index = 0;
+
+    element.textContent = "";
+
+    const timer = setInterval(()=>{
+
+        element.textContent += message[index];
+
+        index++;
+
+        if(index >= message.length){
+
+            clearInterval(timer);
+
+        }
+
+    },35);
+
+}
+
+
+/* ==========================================
    CONFETTI
-========================================================= */
+========================================== */
 
-function launchConfetti(){
+const confettiCanvas =
+    document.getElementById("confetti");
 
-    const canvas =
-        document.getElementById("confetti");
+const confettiCtx =
+    confettiCanvas.getContext("2d");
 
-    const ctx =
-        canvas.getContext("2d");
+let confettiPieces = [];
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+function resizeCanvas(){
 
-    const pieces = [];
+    confettiCanvas.width =
+        window.innerWidth;
 
-    const colors = [
-        "#f4c1dc",
-        "#d8b8ff",
-        "#fff0ad",
-        "#b8e9ff",
-        "#ffffff"
-    ];
+    confettiCanvas.height =
+        window.innerHeight;
 
-    for(let i=0;i<220;i++){
+}
 
-        pieces.push({
+resizeCanvas();
 
-            x:Math.random()*canvas.width,
+window.addEventListener("resize",resizeCanvas);
 
-            y:-20-Math.random()*canvas.height,
+
+function celebrate(){
+
+    confettiPieces = [];
+
+    for(let i=0;i<180;i++){
+
+        confettiPieces.push({
+
+            x:Math.random()*window.innerWidth,
+
+            y:-20-Math.random()*window.innerHeight,
 
             size:4+Math.random()*8,
 
             speed:2+Math.random()*5,
 
+            drift:(Math.random()-.5)*2,
+
             rotation:Math.random()*Math.PI,
 
-            spin:(Math.random()-.5)*.25,
-
-            opacity:1,
-
-            color:
-                colors[
-                    Math.floor(
-                        Math.random()*colors.length
-                    )
-                ]
+            rotationSpeed:(Math.random()-.5)*.2
 
         });
 
     }
 
-    let frame = 0;
-
-    function animate(){
-
-        ctx.clearRect(
-            0,
-            0,
-            canvas.width,
-            canvas.height
-        );
-
-        pieces.forEach(p=>{
-
-            p.y += p.speed;
-
-            p.rotation += p.spin;
-
-            if(p.y > canvas.height){
-                p.opacity -= .01;
-            }
-
-            ctx.save();
-
-            ctx.globalAlpha =
-                Math.max(0,p.opacity);
-
-            ctx.translate(p.x,p.y);
-
-            ctx.rotate(p.rotation);
-
-            ctx.fillStyle = p.color;
-
-            ctx.fillRect(
-                -p.size/2,
-                -p.size/2,
-                p.size,
-                p.size*1.8
-            );
-
-            ctx.restore();
-
-        });
-
-        frame++;
-
-        if(frame < 600){
-
-            requestAnimationFrame(animate);
-
-        }else{
-
-            ctx.clearRect(
-                0,
-                0,
-                canvas.width,
-                canvas.height
-            );
-
-        }
-
-    }
-
-    animate();
+    animateConfetti();
 
 }
 
 
-/* =========================================================
-   RESPONSIVE CANVAS
-========================================================= */
+function animateConfetti(){
 
-window.addEventListener("resize",()=>{
+    confettiCtx.clearRect(
+        0,
+        0,
+        confettiCanvas.width,
+        confettiCanvas.height
+    );
 
-    const canvas =
-        document.getElementById("confetti");
+    confettiPieces.forEach(piece=>{
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+        piece.y += piece.speed;
+        piece.x += piece.drift;
+        piece.rotation += piece.rotationSpeed;
+
+        confettiCtx.save();
+
+        confettiCtx.translate(
+            piece.x,
+            piece.y
+        );
+
+        confettiCtx.rotate(
+            piece.rotation
+        );
+
+        confettiCtx.fillStyle =
+            ["#ff5da2","#9d6cff","#ffd27d","#ffffff"]
+            [Math.floor(Math.random()*4)];
+
+        confettiCtx.fillRect(
+            -piece.size/2,
+            -piece.size/2,
+            piece.size,
+            piece.size*.6
+        );
+
+        confettiCtx.restore();
+
+    });
+
+    confettiPieces =
+        confettiPieces.filter(
+            p => p.y < window.innerHeight + 30
+        );
+
+    if(confettiPieces.length > 0){
+
+        requestAnimationFrame(animateConfetti);
+
+    }
+
+}
+
+
+/* ==========================================
+   STARFIELD
+========================================== */
+
+const starCanvas =
+    document.getElementById("stars");
+
+const starCtx =
+    starCanvas.getContext("2d");
+
+let stars = [];
+
+function resizeStars(){
+
+    starCanvas.width =
+        window.innerWidth;
+
+    starCanvas.height =
+        window.innerHeight;
+
+    stars = [];
+
+    for(let i=0;i<130;i++){
+
+        stars.push({
+
+            x:Math.random()*window.innerWidth,
+
+            y:Math.random()*window.innerHeight,
+
+            radius:Math.random()*1.5+.2,
+
+            alpha:Math.random()*.7+.2,
+
+            speed:Math.random()*.2+.05
+
+        });
+
+    }
+
+}
+
+resizeStars();
+
+window.addEventListener("resize",resizeStars);
+
+
+function animateStars(){
+
+    starCtx.clearRect(
+        0,
+        0,
+        starCanvas.width,
+        starCanvas.height
+    );
+
+    stars.forEach(star=>{
+
+        star.y -= star.speed;
+
+        if(star.y < 0){
+
+            star.y =
+                window.innerHeight;
+
+        }
+
+        starCtx.beginPath();
+
+        starCtx.arc(
+            star.x,
+            star.y,
+            star.radius,
+            0,
+            Math.PI*2
+        );
+
+        starCtx.fillStyle =
+            `rgba(255,255,255,${star.alpha})`;
+
+        starCtx.fill();
+
+    });
+
+    requestAnimationFrame(animateStars);
+
+}
+
+animateStars();
+
+
+/* ==========================================
+   MOUSE PARALLAX
+========================================== */
+
+let mouseX = 0;
+let mouseY = 0;
+
+window.addEventListener("mousemove",event=>{
+
+    mouseX =
+        (event.clientX / window.innerWidth - .5);
+
+    mouseY =
+        (event.clientY / window.innerHeight - .5);
+
+});
+
+setInterval(()=>{
+
+    const hero =
+        document.querySelector(".hero-content");
+
+    if(hero){
+
+        hero.style.transform =
+            `translate(${mouseX*8}px,${mouseY*8}px)`;
+
+    }
+
+},30);
+
+
+/* ==========================================
+   AUDIO END
+========================================== */
+
+music.addEventListener("ended",()=>{
+
+    playing = false;
+
+    musicBtn.textContent = "♫";
+
+    disc.classList.remove("playing");
 
 });
 
@@ -2324,4 +1840,3 @@ window.addEventListener("resize",()=>{
 
 </body>
 </html>
-```
