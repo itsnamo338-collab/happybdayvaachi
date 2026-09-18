@@ -1,1 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vaachi — The Birthday Cut 🎂</title>
 
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@500;600;700&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+html{scroll-behavior:smooth}
+
+body{
+    background:#08070d;
+    color:#fff;
+    font-family:'DM Sans',sans-serif;
+    overflow-x:hidden;
+}
+
+body:before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+      radial-gradient(circle at 20% 20%,rgba(164,95,255,.14),transparent 30%),
+      radial-gradient(circle at 80% 70%,rgba(255,120,190,.12),transparent 30%);
+    pointer-events:none;
+    z-index:-2;
+}
+
+.stars{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:-1;
+}
+
+.star{
+    position:absolute;
+    width:2px;
+    height:2px;
+    background:white;
+    border-radius:50%;
+    opacity:.7;
+    animation:twinkle 3s infinite alternate;
+}
+
+@keyframes twinkle{
+    from{opacity:.15;transform:scale(.7)}
+    to{opacity:.9;transform:scale(1.4)}
+}
+
+section{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:70px 22px;
+    position:relative;
+}
+
+.hero{
+    text-align:center;
+    flex-direction:column;
+}
+
+.small{
+    letter-spacing:5px;
+    text-transform:uppercase;
+    font-size:11px;
+    color:#bcb4d4;
+    margin-bottom:25px;
+}
+
+.hero h1{
+    font-family:'Playfair Display',serif;
+    font-size:clamp(65px,15vw,150px);
+    line-height:.9;
+    background:linear-gradient(120deg,#fff,#e7bfff,#ffb8d9);
+    -webkit-background-clip:text;
+    color:transparent;
+    animation:float 5s ease-in-out infinite;
+}
+
+@keyframes float{
+    50%{transform:translateY(-8px)}
+}
+
+.subtitle{
+    margin-top:30px;
+    font-size:18px;
+    color:#c7c1d4;
+}
+
+.btn{
+    margin-top:45px;
+    border:1px solid rgba(255,255,255,.25);
+    background:rgba(255,255,255,.07);
+    color:white;
+    padding:15px 28px;
+    border-radius:50px;
+    cursor:pointer;
+    font-size:15px;
+    transition:.3s;
+    backdrop-filter:blur(10px);
+}
+
+.btn:hover{
+    background:rgba(255,255,255,.16);
+    transform:translateY(-3px);
+}
+
+.scroll{
+    position:absolute;
+    bottom:30px;
+    font-size:11px;
+    letter-spacing:3px;
+    color:#777;
+}
+
+.chapter{
+    max-width:900px;
+    width:100%;
+    text-align:center;
+}
+
+.chapter-number{
+    color:#b78cff;
+    letter-spacing:5px;
+    font-size:12px;
+    margin-bottom:20px;
+}
+
+.chapter h2{
+    font-family:'Playfair Display',serif;
+    font-size:clamp(40px,8vw,78px);
+    margin-bottom:25px;
+}
+
+.chapter p{
+    max-width:650px;
+    margin:auto;
+    color:#bbb5c7;
+    font-size:18px;
+    line-height:1.8;
+}
+
+.card{
+    margin:45px auto 0;
+    max-width:650px;
+    padding:35px;
+    border:1px solid rgba(255,255,255,.1);
+    background:rgba(255,255,255,.045);
+    border-radius:25px;
+    backdrop-filter:blur(15px);
+    box-shadow:0 20px 70px rgba(0,0,0,.35);
+}
+
+.case{
+    text-align:left;
+}
+
+.case div{
+    display:flex;
+    justify-content:space-between;
+    padding:13px 0;
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.case span:last-child{
+    color:#e5b9ff;
+}
+
+.quote{
+    font-family:'Playfair Display',serif;
+    font-size:30px;
+    line-height:1.5;
+    color:#eee;
+}
+
+.timeline{
+    margin-top:50px;
+    display:grid;
+    gap:18px;
+}
+
+.memory{
+    padding:25px;
+    border-radius:20px;
+    background:rgba(255,255,255,.045);
+    border:1px solid rgba(255,255,255,.08);
+    text-align:left;
+}
+
+.memory strong{
+    color:#e1b7ff;
+}
+
+.memory p{
+    margin-top:8px;
+    font-size:15px;
+}
+
+.music{
+    width:90px;
+    height:90px;
+    margin:35px auto;
+    border-radius:50%;
+    border:1px solid rgba(255,255,255,.2);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:35px;
+    animation:spin 8s linear infinite;
+}
+
+@keyframes spin{
+    to{transform:rotate(360deg)}
+}
+
+.final{
+    flex-direction:column;
+    text-align:center;
+}
+
+.final h2{
+    font-family:'Playfair Display',serif;
+    font-size:clamp(45px,10vw,90px);
+}
+
+.hidden-message{
+    display:none;
+    max-width:750px;
+    margin-top:35px;
+    animation:appear 1.5s ease forwards;
+}
+
+@keyframes appear{
+    from{opacity:0;transform:translateY(30px)}
+    to{opacity:1;transform:translateY(0)}
+}
+
+.message{
+    font-size:18px;
+    line-height:2;
+    color:#ddd6e5;
+}
+
+.message .highlight{
+    color:#f2c1dc;
+    font-family:'Playfair Display',serif;
+    font-size:28px;
+}
+
+.signature{
+    margin-top:35px;
+    color:#a99caf;
+}
+
+#confetti{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:20;
+}
+
+footer{
+    text-align:center;
+    padding:30px;
+    color:#666;
+    font-size:12px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="stars" id="stars"></div>
+<canvas id="confetti"></canvas>
+
+<!-- OPENING -->
+<section class="hero">
+    <div class="small">A little story about two years</div>
+
+    <h1>VAACHI</h1>
+
+    <div class="subtitle">
+        Some friendships deserve their own movie. 🎬
+    </div>
+
+    <button class="btn" onclick="startStory()">
+        ✨ Begin the story
+    </button>
+
+    <div class="scroll">SCROLL TO CONTINUE ↓</div>
+</section>
+
+<!-- CHAPTER 1 -->
+<section>
+<div class="chapter">
+    <div class="chapter-number">CHAPTER 01</div>
+    <h2>The Beginning</h2>
+
+    <p>
+        Two years ago, this was just another friendship.
+        Somehow, it turned into hundreds of conversations,
+        countless memories and way too much chaos.
+    </p>
+
+    <div class="card">
+        <div class="quote">
+            “Two years.<br>
+            Countless memories.<br>
+            And we're still here.”
+        </div>
+    </div>
+</div>
+</section>
+
+<!-- CHAPTER 2 -->
+<section>
+<div class="chapter">
+    <div class="chapter-number">CHAPTER 02</div>
+    <h2>The Lunch Crimes 🍱</h2>
+
+    <p>
+        Mission: eat lunch between classes.<br>
+        Difficulty: apparently impossible.
+    </p>
+
+    <div class="card case">
+        <div>
+            <span>Mission</span>
+            <span>Have lunch</span>
+        </div>
+        <div>
+            <span>Location</span>
+            <span>Between classes</span>
+        </div>
+        <div>
+            <span>Stealth level</span>
+            <span>2/10 😭</span>
+        </div>
+        <div>
+            <span>Final result</span>
+            <span>CAUGHT AGAIN</span>
+        </div>
+    </div>
+</div>
+</section>
+
+<!-- CHAPTER 3 -->
+<section>
+<div class="chapter">
+    <div class="chapter-number">CHAPTER 03</div>
+    <h2>Classified 🔐</h2>
+
+    <p>
+        Some people know a few things about you.
+        Then there's Vaachi.
+    </p>
+
+    <div class="card">
+        <div class="quote">
+            “Keeper of secrets.<br>
+            Witness to the chaos.<br>
+            Somehow still trusted with the classified archive.”
+        </div>
+    </div>
+</div>
+</section>
+
+<!-- CHAPTER 4 -->
+<section>
+<div class="chapter">
+    <div class="chapter-number">CHAPTER 04</div>
+    <h2>Legendary Patience 😂</h2>
+
+    <p>
+        Two years of putting up with my nonsense deserves
+        some kind of award.
+    </p>
+
+    <div class="card case">
+        <div>
+            <span>Patience</span>
+            <span>██████████ 100%</span>
+        </div>
+        <div>
+            <span>Tolerance</span>
+            <span>██████████ 110%</span>
+        </div>
+        <div>
+            <span>Chaos survived</span>
+            <span>∞</span>
+        </div>
+        <div>
+            <span>Friendship status</span>
+            <span>STILL GOING</span>
+        </div>
+    </div>
+</div>
+</section>
+
+<!-- DILJIT EASTER EGG -->
+<section>
+<div class="chapter">
+    <div class="chapter-number">BONUS SCENE 🎧</div>
+    <h2>Main Character Energy</h2>
+
+    <p>
+        Every main character needs a soundtrack.
+        And yes... we know who belongs somewhere on this one. 👀
+    </p>
+
+    <div class="music">🎧</div>
+
+    <p style="font-size:14px;color:#777;">
+        Diljit mode: ACTIVATED ✨
+    </p>
+</div>
+</section>
+
+<!-- MEMORIES -->
+<section>
+<div class="chapter">
+    <div class="chapter-number">THE ARCHIVE</div>
+    <h2>Two Years of Memories</h2>
+
+    <p>
+        This part belongs to the moments that don't need
+        a perfect explanation.
+    </p>
+
+    <div class="timeline">
+        <div class="memory">
+            <strong>MEMORY 001</strong>
+            <p>The random conversations that somehow lasted forever.</p>
+        </div>
+
+        <div class="memory">
+            <strong>MEMORY 002</strong>
+            <p>The between-class lunch missions. 🍱</p>
+        </div>
+
+        <div class="memory">
+            <strong>MEMORY 003</strong>
+            <p>The secrets that somehow stayed classified. 🔐</p>
+        </div>
+
+        <div class="memory">
+            <strong>MEMORY 004</strong>
+            <p>All the completely chaotic moments in between.</p>
+        </div>
+    </div>
+
+    <p style="margin-top:40px;font-size:14px;color:#777;">
+        📸 Real photos coming soon...
+    </p>
+</div>
+</section>
+
+<!-- FINAL -->
+<section class="final">
+    <div class="small">THE FINAL CHAPTER</div>
+
+    <h2>Happy Birthday,<br>Vaachi! 🎂</h2>
+
+    <button class="btn" onclick="reveal()">
+        💌 Open your message
+    </button>
+
+    <div class="hidden-message" id="message">
+
+        <div class="message">
+
+            <p>
+                Two years.
+            </p>
+
+            <p>
+                It honestly feels weird saying that because somehow,
+                in those two years, we've managed to collect enough
+                memories, jokes, random conversations and absolute
+                chaos to make it feel like we've known each other
+                for much longer. 😂
+            </p>
+
+            <p>
+                School would definitely have been a different place
+                without you in it.
+            </p>
+
+            <p>
+                From our legendary attempts to have lunch between
+                classes without getting caught, to all the secrets
+                you've somehow managed to keep, you've become a pretty
+                important part of my school memories.
+            </p>
+
+            <p>
+                And somehow you've survived two years of my nonsense.
+                Honestly, that deserves a trophy. 🏆😂
+            </p>
+
+            <p>
+                But jokes aside, I just wanted to make something
+                special for you today.
+            </p>
+
+            <p class="highlight">
+                You deserve a birthday that's as memorable as
+                the memories we've made.
+            </p>
+
+            <p>
+                I hope this next year brings you a ridiculous amount
+                of happiness, amazing experiences, great people,
+                and plenty of reasons to smile.
+            </p>
+
+            <p>
+                Keep being yourself, keep enjoying your music,
+                keep creating memories, and keep being the person
+                you are.
+            </p>
+
+            <p>
+                Here's to the two years we've already had...
+                and all the memories still waiting to happen.
+            </p>
+
+            <p class="highlight">
+                Happy Birthday, Vaachi. 🎂✨
+            </p>
+
+            <div class="signature">
+                — From your fellow lunch criminal 😂
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<footer>
+    Made with ✨, memories & questionable lunch-time decisions.
+</footer>
+
+<script>
+
+/* STARS */
+const stars = document.getElementById("stars");
+
+for(let i=0;i<100;i++){
+    const star=document.createElement("div");
+    star.className="star";
+    star.style.left=Math.random()*100+"%";
+    star.style.top=Math.random()*100+"%";
+    star.style.animationDelay=Math.random()*4+"s";
+    stars.appendChild(star);
+}
+
+/* START STORY */
+function startStory(){
+    window.scrollTo({
+        top:window.innerHeight,
+        behavior:"smooth"
+    });
+}
+
+/* CONFETTI */
+function reveal(){
+
+    document.getElementById("message").style.display="block";
+
+    const canvas=document.getElementById("confetti");
+    const ctx=canvas.getContext("2d");
+
+    canvas.width=window.innerWidth;
+    canvas.height=window.innerHeight;
+
+    const pieces=[];
+
+    for(let i=0;i<180;i++){
+        pieces.push({
+            x:Math.random()*canvas.width,
+            y:-20-Math.random()*canvas.height,
+            size:5+Math.random()*8,
+            speed:2+Math.random()*5,
+            rotation:Math.random()*Math.PI,
+            spin:(Math.random()-.5)*.2
+        });
+    }
+
+    let frame=0;
+
+    function animate(){
+
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+
+        pieces.forEach(p=>{
+            p.y+=p.speed;
+            p.rotation+=p.spin;
+
+            ctx.save();
+            ctx.translate(p.x,p.y);
+            ctx.rotate(p.rotation);
+
+            ctx.fillStyle=[
+                "#f5b7d2",
+                "#d4b5ff",
+                "#fff1a8",
+                "#aee8ff",
+                "#ffffff"
+            ][Math.floor(Math.random()*5)];
+
+            ctx.fillRect(
+                -p.size/2,
+                -p.size/2,
+                p.size,
+                p.size*1.7
+            );
+
+            ctx.restore();
+        });
+
+        frame++;
+
+        if(frame<500){
+            requestAnimationFrame(animate);
+        }else{
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+        }
+    }
+
+    animate();
+
+    setTimeout(()=>{
+        document.getElementById("message").scrollIntoView({
+            behavior:"smooth",
+            block:"center"
+        });
+    },500);
+}
+
+</script>
+
+</body>
+</html>
